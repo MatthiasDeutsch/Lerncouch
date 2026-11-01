@@ -1,0 +1,39 @@
+1
+00:00:08,120 --> 00:00:14,233
+Wir öffnen das Netz der ScooterShare. Links die Forschung, rechts das Büro, in der Mitte der Router.
+
+2
+00:00:17,633 --> 00:00:23,824
+Am Router bekommt die Schnittstelle zur Forschung die Adresse 10.10.10.1.
+
+3
+00:00:27,224 --> 00:00:32,083
+Die Schnittstelle zum Büro bekommt 10.10.20.1.
+
+4
+00:00:35,483 --> 00:00:39,767
+Jeder Rechner bekommt als Gateway die Router-Adresse aus seinem eigenen Netz.
+
+5
+00:00:50,378 --> 00:00:57,614
+Im Aktionsmodus testen wir von PC-B1 aus. Noch erreicht das Büro auch den Laborserver – der Weg führt über den Router.
+
+6
+00:01:04,003 --> 00:01:08,417
+Am Router öffnen wir die Firewall, schalten sie ein und filtern ICMP.
+
+7
+00:01:11,817 --> 00:01:19,654
+Zwei Regeln: Das Büro darf per HTTP auf den Projektserver, die Forschung darf ins Büro. Alles andere wird verworfen.
+
+8
+00:01:29,257 --> 00:01:30,407
+Fenster schließen.
+
+9
+00:01:33,137 --> 00:01:38,675
+Vom Büro aus lädt die Projektseite, denn Regel eins erlaubt HTTP zum Projektserver.
+
+10
+00:01:45,447 --> 00:01:50,097
+Der Laborserver bleibt gesperrt: Keine Regel passt, also wird verworfen.

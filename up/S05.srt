@@ -1,0 +1,23 @@
+1
+00:00:07,441 --> 00:00:11,934
+Wir öffnen die Startdatei. Ein Router verbindet drei Netze der BrainChain.
+
+2
+00:00:16,876 --> 00:00:24,556
+Im Aktionsmodus testen wir von PC3 aus. Der Nachbar im eigenen Netz antwortet, Laptop200 im anderen Netz nicht.
+
+3
+00:00:32,116 --> 00:00:39,509
+Im Entwurfsmodus sehen wir uns PC3 an. Das Gateway fehlt. Ohne Gateway findet PC3 keinen Weg in andere Netze.
+
+4
+00:00:40,409 --> 00:00:46,913
+Wir tragen die Router-Adresse 172.16.10.1 als Gateway ein.
+
+5
+00:00:47,813 --> 00:00:55,049
+Wir testen erneut. Kommt noch keine Antwort, liegt der Fehler auf der anderen Seite, denn auch die Antwort braucht einen Weg zurück.
+
+6
+00:00:59,013 --> 00:01:06,301
+Die anderen beiden Fehler finden Sie genauso: Maske und Gateway mit der Adresstabelle vergleichen, korrigieren, erneut testen.
