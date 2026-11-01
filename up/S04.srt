@@ -1,0 +1,429 @@
+1
+00:00:00,500 --> 00:00:05,246
+Ein neuer Bildungsplan, vierzig Stunden –
+und Sie sollen daraus Unterricht machen.
+
+2
+00:00:05,296 --> 00:00:07,228
+Manche von uns fangen bei null an.
+
+3
+00:00:07,278 --> 00:00:11,913
+Andere haben einen dicken Ordner mit alten
+Unterlagen, die eigentlich ganz gut sind.
+
+4
+00:00:11,963 --> 00:00:13,709
+Heute zeige ich beide Wege.
+
+5
+00:00:13,759 --> 00:00:17,191
+Am Ende steht jeweils eine Makroplanung für
+die ganze Einheit.
+
+6
+00:00:17,241 --> 00:00:19,583
+Claude schlägt vor – und Sie entscheiden.
+
+7
+00:00:25,683 --> 00:00:28,939
+Eine Makroplanung ist der Fahrplan für die
+ganze Einheit.
+
+8
+00:00:28,989 --> 00:00:32,450
+Sie teilt die Stunden in Lernsituationen:
+Worum geht es,
+
+9
+00:00:32,450 --> 00:00:36,096
+wie viele Stunden, und was legen die
+Lernenden am Ende vor?
+
+10
+00:00:36,146 --> 00:00:40,017
+Zu jeder Lernsituation steht der passende
+Satz aus dem Bildungsplan –
+
+11
+00:00:40,017 --> 00:00:42,485
+so sehen Sie sofort, ob alles abgedeckt ist.
+
+12
+00:00:42,535 --> 00:00:45,439
+Dazu gibt es zwei Einstiege.
+
+13
+00:00:45,489 --> 00:00:47,226
+Weg A: Sie starten beim Bildungsplan.
+
+14
+00:00:47,276 --> 00:00:49,522
+Weg B: Sie haben schon Material.
+
+15
+00:00:49,572 --> 00:00:52,586
+Dann nimmt Claude zuerst Bestand auf – was
+passt,
+
+16
+00:00:52,586 --> 00:00:55,661
+was fehlt, was ist veraltet – und plant erst
+dann.
+
+17
+00:00:55,711 --> 00:01:00,081
+Beide Wege enden in derselben Datei – der
+Makroplanung in Ihrem Ordner.
+
+18
+00:01:01,381 --> 00:01:05,666
+Die Regeln dafür stehen im Skill Planung,
+der schon im Starter-Ordner liegt:
+
+19
+00:01:05,666 --> 00:01:11,303
+höchstens zwei Fachthemen pro Lernsituation,
+die Stunden einhalten, ein durchgehender
+Modellbetrieb.
+
+20
+00:01:11,353 --> 00:01:12,470
+Und ganz unten: um Freigabe bitten.
+
+21
+00:01:12,520 --> 00:01:16,201
+Claude plant also nichts einfach durch.
+
+22
+00:01:16,251 --> 00:01:17,905
+Den Skill müssen Sie nicht anfassen.
+
+23
+00:01:17,955 --> 00:01:22,011
+Fehlt Ihnen eine Regel, sagen Sie es Claude
+– dann steht sie ab sofort mit drin.
+
+24
+00:01:24,811 --> 00:01:28,557
+Schritt eins: Für Weg A reicht der
+Bildungsplan im Eingang.
+
+25
+00:01:28,607 --> 00:01:33,445
+Für Weg B legen Sie Ihre alten Unterlagen in
+den Ordner „Alte Unterlagen“ –
+
+26
+00:01:33,445 --> 00:01:35,122
+Word, PDF oder PowerPoint.
+
+27
+00:01:35,172 --> 00:01:36,965
+Aufräumen müssen Sie vorher nichts.
+
+28
+00:01:37,015 --> 00:01:38,910
+Nehmen Sie nur Ihr eigenes Material –
+
+29
+00:01:38,910 --> 00:01:42,033
+was andere geschrieben oder lizenziert
+haben, bleibt draußen.
+
+30
+00:01:44,333 --> 00:01:46,376
+Schritt zwei: der Auftrag.
+
+31
+00:01:46,426 --> 00:01:51,126
+Ich sage: „Ich möchte jetzt den
+Kompetenzbereich eins planen, vierzig
+Stunden.
+
+32
+00:01:51,176 --> 00:01:53,848
+Nimm den Bildungsplan und den Skill Planung.
+
+33
+00:01:53,898 --> 00:01:58,542
+Modellbetrieb ist das Holzwerk Seeberg in
+Radolfzell, die Auszubildende heißt Lena.
+
+34
+00:01:58,592 --> 00:01:59,959
+Mach mir einen Vorschlag.“
+
+35
+00:02:00,009 --> 00:02:03,496
+Welcher Bereich, welche Grundlage, welcher
+Modellbetrieb.
+
+36
+00:02:03,546 --> 00:02:05,802
+Nehmen Sie ruhig einen Betrieb aus Ihrer
+Region –
+
+37
+00:02:05,802 --> 00:02:07,505
+das macht es für die Klasse greifbar.
+
+38
+00:02:07,555 --> 00:02:09,700
+Den Rest weiß Claude aus Ihrem Ordner.
+
+39
+00:02:09,750 --> 00:02:15,542
+Für Weg B kommt ein Satz dazu: „Schau dir
+vorher meine alten Unterlagen an und mach
+eine Tabelle:
+
+40
+00:02:15,542 --> 00:02:17,931
+Was passt, was fehlt, was ist veraltet.“
+
+41
+00:02:17,981 --> 00:02:23,027
+Sagen Sie Claude außerdem, ob Sie Ihr
+Material neu aufbauen oder nur angleichen
+wollen –
+
+42
+00:02:23,027 --> 00:02:26,009
+also Namen, Kopfzeile und Verweise
+vereinheitlichen.
+
+43
+00:02:28,809 --> 00:02:31,481
+Zuerst die Bestandstabelle von Weg B.
+
+44
+00:02:31,531 --> 00:02:34,706
+Mein Arbeitsblatt zum Ausbildungsvertrag
+passt noch –
+
+45
+00:02:34,706 --> 00:02:38,481
+aber es fehlt die Mindestvergütung, die es
+erst seit 2020 gibt.
+
+46
+00:02:38,531 --> 00:02:41,740
+Genau das soll Claude finden: Veraltetes
+wird markiert,
+
+47
+00:02:41,740 --> 00:02:43,666
+nicht stillschweigend übernommen.
+
+48
+00:02:43,716 --> 00:02:46,741
+So sehen Sie auf einen Blick, was Sie
+weiterverwenden können –
+
+49
+00:02:46,741 --> 00:02:48,253
+und wo Sie nacharbeiten müssen.
+
+50
+00:02:51,553 --> 00:02:54,669
+Und das ist der Vorschlag: sechs
+Lernsituationen,
+
+51
+00:02:54,669 --> 00:02:57,975
+vierzig Stunden, Übung und Klassenarbeit
+eingeplant.
+
+52
+00:02:58,025 --> 00:03:01,357
+Ein Blick in die Lernsituation zum
+Ausbildungsvertrag:
+
+53
+00:03:01,357 --> 00:03:04,133
+oben der Satz aus dem Bildungsplan,
+wörtlich.
+
+54
+00:03:04,183 --> 00:03:09,392
+Dann die Fachinhalte und was die Lernenden
+vorlegen – hier prüfen sie Lenas Vertrag.
+
+55
+00:03:09,442 --> 00:03:13,346
+Bei Weg B steht dabei, welches alte Material
+hier hineinpasst.
+
+56
+00:03:13,396 --> 00:03:15,914
+Und wo eine Grafik hilft, ist das schon
+vermerkt –
+
+57
+00:03:15,914 --> 00:03:18,331
+darauf greifen wir in der nächsten Folge
+zurück.
+
+58
+00:03:21,631 --> 00:03:24,174
+Prüfen Sie mit fünf Fragen: Alles drin?
+
+59
+00:03:24,224 --> 00:03:25,359
+Stunden stimmen?
+
+60
+00:03:25,409 --> 00:03:27,266
+Höchstens zwei Fachthemen?
+
+61
+00:03:27,316 --> 00:03:28,720
+Baut die Reihenfolge auf?
+
+62
+00:03:28,770 --> 00:03:31,025
+Und: Passt das zu Ihrer Klasse?
+
+63
+00:03:31,075 --> 00:03:34,544
+Die ersten vier kann Claude selbst prüfen –
+fragen Sie ruhig nach.
+
+64
+00:03:34,594 --> 00:03:37,446
+Die letzte kann nur beantworten, wer die
+Klasse kennt.
+
+65
+00:03:38,746 --> 00:03:40,724
+Schritt vier: Ändern.
+
+66
+00:03:40,774 --> 00:03:42,890
+Wieder sprechen Sie einfach drauflos: „Gut
+so weit.
+
+67
+00:03:42,940 --> 00:03:45,727
+Den Jugendarbeitsschutz bitte nur vier
+Stunden,
+
+68
+00:03:45,727 --> 00:03:48,159
+die freie Stunde bekommt der Betriebsrat.
+
+69
+00:03:48,209 --> 00:03:51,135
+Und bei der Sozialen Marktwirtschaft brauch
+ich mehr Alltag,
+
+70
+00:03:51,135 --> 00:03:52,696
+die Klasse ist da eher schwach.“
+
+71
+00:03:52,746 --> 00:03:56,066
+Grammatik egal, Hauptsache, es hat Hand und
+Fuß.
+
+72
+00:03:56,116 --> 00:03:57,870
+Claude ändert nicht nur die Zahlen,
+
+73
+00:03:57,870 --> 00:04:01,529
+sondern rechnet die Stunden neu durch und
+ergänzt den Hinweis zur Klasse.
+
+74
+00:04:01,579 --> 00:04:03,400
+Gelb sehen Sie, was neu ist.
+
+75
+00:04:03,450 --> 00:04:06,126
+Passt etwas noch nicht, sagen Sie es einfach
+noch einmal.
+
+76
+00:04:09,426 --> 00:04:11,348
+Dann geben Sie frei: „Passt.
+
+77
+00:04:11,398 --> 00:04:13,172
+Die Makroplanung ist freigegeben.
+
+78
+00:04:13,222 --> 00:04:15,413
+Trag das bitte in die Status-Datei ein.“
+
+79
+00:04:15,463 --> 00:04:17,848
+Ab jetzt ist diese Planung die Grundlage.
+
+80
+00:04:17,898 --> 00:04:21,474
+Claude baut Lernsituationen nur auf
+freigegebenen Planungen auf –
+
+81
+00:04:21,474 --> 00:04:23,070
+das steht so in Ihren Regeln.
+
+82
+00:04:23,120 --> 00:04:26,106
+Beim nächsten Mal sagen Sie nur „Lies dich
+bitte ein“ –
+
+83
+00:04:26,106 --> 00:04:28,657
+und Claude schlägt die erste Lernsituation
+vor.
+
+84
+00:04:31,957 --> 00:04:34,833
+Wenn Sie sich aus dieser Folge einen Satz
+merken:
+
+85
+00:04:34,833 --> 00:04:38,003
+Die Planung entscheiden Sie – Claude macht
+Vorschläge.
+
+86
+00:04:41,303 --> 00:04:43,875
+Ihre Aufgabe: Bildungsplan in den Eingang,
+
+87
+00:04:43,875 --> 00:04:46,753
+und wenn Sie haben, Ihre alten Unterlagen
+dazu.
+
+88
+00:04:46,803 --> 00:04:49,562
+Auftrag einsprechen, mit den fünf Fragen
+prüfen –
+
+89
+00:04:49,562 --> 00:04:52,377
+und erst freigeben, wenn es zu Ihrer Klasse
+passt.
+
+90
+00:04:53,677 --> 00:04:56,896
+In der nächsten Folge wird aus der Planung
+Material:
+
+91
+00:04:56,896 --> 00:05:00,053
+Lernsituation, Infoblatt, Prüfung, Quiz und
+Lösung.
+
+92
+00:05:00,103 --> 00:05:04,423
+Und damit Sie keine Folge verpassen: Lassen
+Sie gern ein Abo da.
+
+93
+00:05:04,473 --> 00:05:05,121
+Bis dahin!
