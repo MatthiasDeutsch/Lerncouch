@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!--
+  ============================================================================
+  INTERAKTIVE QUIZ-VORLAGE  ·  KI im Lehrerzimmer (Demo)
+  ============================================================================
+  Standard-Engine fuer selbstauswertende Quizze (Schuelerversion).
+  ANPASSUNG: Nur den Block QUIZ_META und das Array QUIZ_DATA unten ausfuellen.
+  Fragetypen:
+    - "mc"    : Multiple Choice, GENAU EINE richtige Antwort (radio)
+    - "multi" : Mehrfachauswahl, mehrere richtige Antworten (checkbox)
+    - "match" : Zuordnung Begriff -> Erklaerung (Dropdown je Zeile)
+    - "fill"  : Lueckentext / Kurzwort (Texteingabe, mehrere Loesungen erlaubt)
+    - "short" : Kurzantwort/Freitext (nicht auto-bewertbar -> Musterloesung + Selbstkontrolle)
+  Auswertung: Button "Auswerten" -> Punkte, Prozent, Note (Notenschluessel unten im Skript),
+  je Frage gruen/rot + Erklaerungstext (auch warum eine Antwort falsch ist).
+  ============================================================================
+-->
+<title>Quiz</title>
+<style>
+  :root{
+    --color-primary-dark:#1F4D78; --color-primary-mid:#2E74B5; --color-primary-light:#0563C1;
+    --color-accent-orange:#C05A00; --color-accent-green:#1E6B3C; --color-accent-red:#B22222;
+    --color-bg-merkbox:#FFF8EE; --color-bg-table-alt:#F0F6FB; --color-bg-code:#1E1E2E;
+    --color-text-body:#212121; --color-text-muted:#555555; --color-border:#C9D8EA;
+    --ok-bg:#EAF6EE; --ok-bd:#1E6B3C; --no-bg:#FBECEC; --no-bd:#B22222;
+    /* Dokumenttyp-Farbcode QUIZ (lila) – siehe KONVENTIONEN.md §7 */
+    --color-quiz:#5B2E91; --color-quiz-accent:#8E5BC4;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:Arial,Helvetica,sans-serif; font-size:11pt; line-height:1.5; color:var(--color-text-body);
+       max-width:900px; margin:0 auto; padding:24px; background:#fff;}
+  .doc-header{background:var(--color-quiz); color:#fff; padding:16px 20px; border-radius:6px; border-bottom:3px solid var(--color-quiz-accent);}
+  .doc-header h1{margin:0; font-size:18pt;}
+  .doc-badge{display:inline-block; background:#fff; color:var(--color-quiz); font-size:8.5pt; font-weight:bold;
+             letter-spacing:.6pt; text-transform:uppercase; padding:2px 9px; border-radius:10px; margin:0 0 8px 0;}
+  .h1-sub{display:block; font-size:10.5pt; font-weight:normal; margin-top:6px; color:#D4E9FF;}
+  h2{color:var(--color-primary-mid); font-size:14pt; border-bottom:2px solid var(--color-border); padding-bottom:4px; margin-top:28px;}
+  code{background:#E8F0FE; color:var(--color-primary-dark); border:1px solid var(--color-border);
+       border-radius:3px; padding:1px 4px; font-family:Consolas,"Courier New",monospace; font-size:9.5pt;}
+  pre{background:var(--color-bg-code); color:#D4E9FF; padding:10px; border-radius:4px; border-left:3px solid var(--color-primary-light);
+      overflow-x:auto; font-family:Consolas,"Courier New",monospace; font-size:9.5pt;}
+  .merkbox{border:1px solid var(--color-accent-orange); border-left:4px solid var(--color-accent-orange);
+           background:var(--color-bg-merkbox); padding:10px 14px; border-radius:4px; margin:14px 0;}
+  .merkbox b{color:var(--color-accent-orange);}
+  .frage{border:1px solid var(--color-border); border-radius:6px; padding:14px 18px; margin:18px 0; background:#fff;}
+  .frage-kopf{font-weight:bold; color:var(--color-primary-dark); margin-bottom:10px; display:flex; gap:8px;}
+  .frage-nr{background:var(--color-primary-mid); color:#fff; border-radius:4px; padding:1px 8px; font-size:10pt; white-space:nowrap;}
+  .frage-typ{font-size:8.5pt; color:var(--color-text-muted); font-weight:normal; margin-left:auto;}
+  .option{display:block; padding:7px 10px; margin:5px 0; border:1px solid var(--color-border); border-radius:4px; cursor:pointer; transition:background .12s;}
+  .option:hover{background:var(--color-bg-table-alt);}
+  .option input{margin-right:9px;}
+  .option.correct{background:var(--ok-bg); border-color:var(--ok-bd);}
+  .option.wrong{background:var(--no-bg); border-color:var(--no-bd);}
+  .match-row{display:flex; align-items:center; gap:10px; margin:6px 0;}
+  .match-term{flex:0 0 42%; font-weight:bold;}
+  .match-row select, .fill-input{font-family:Arial; font-size:10.5pt; padding:5px; border:1px solid var(--color-border); border-radius:4px;}
+  .match-row select{flex:1;}
+  .fill-input{width:60%;}
+  textarea{width:100%; min-height:70px; font-family:Arial; font-size:10.5pt; padding:8px; border:1px solid var(--color-border); border-radius:4px;}
+  .feedback{margin-top:10px; padding:10px 12px; border-radius:4px; font-size:10pt; display:none;}
+  .feedback.show{display:block;}
+  .feedback.ok{background:var(--ok-bg); border-left:4px solid var(--ok-bd);}
+  .feedback.no{background:var(--no-bg); border-left:4px solid var(--no-bd);}
+  .feedback.self{background:#EDF3FA; border-left:4px solid var(--color-primary-mid);}
+  .feedback .lbl{font-weight:bold;}
+  .feedback .musterloesung{margin-top:6px; padding:8px; background:#fff; border:1px dashed var(--color-border); border-radius:4px;}
+  .actions{position:sticky; bottom:0; background:#fff; padding:14px 0; border-top:2px solid var(--color-border); margin-top:24px; display:flex; gap:12px; align-items:center;}
+  button{font-family:Arial; font-size:11pt; font-weight:bold; padding:10px 22px; border:none; border-radius:5px; cursor:pointer;}
+  .btn-eval{background:var(--color-accent-green); color:#fff;}
+  .btn-reset{background:#eee; color:#333;}
+  .btn-eval:hover{background:#175630;} .btn-reset:hover{background:#ddd;}
+  #ergebnis{display:none; margin-top:10px; padding:16px 20px; border-radius:6px; border:2px solid var(--color-primary-mid); background:var(--color-bg-table-alt);}
+  #ergebnis.show{display:block;}
+  #ergebnis .score{font-size:16pt; font-weight:bold; color:var(--color-primary-dark);}
+  #ergebnis .note{font-size:14pt; font-weight:bold;}
+  .bar{height:14px; background:#e3e3e3; border-radius:7px; overflow:hidden; margin:10px 0;}
+  .bar > span{display:block; height:100%; background:var(--color-accent-green);}
+  .footer{margin-top:28px; padding-top:8px; border-top:1.5px solid var(--color-border); font-size:9pt; color:var(--color-text-muted); display:flex; justify-content:space-between;}
+  @media print{ .actions{position:static;} .option{cursor:default;} }
+</style>
+</head>
+<body>
+<div class="doc-header">
+  <span class="doc-badge">Quiz</span>
+  <h1 id="q-titel">Quiz-Titel</h1>
+  <span class="h1-sub" id="q-sub">Fach · Lernsituation · Schuljahr</span>
+</div>
+
+<div class="merkbox">
+  <b>💡 So funktioniert es:</b> Beantworte alle Fragen und klicke unten auf <b>„Auswerten“</b>.
+  Du siehst sofort, welche Antworten richtig (grün) oder falsch (rot) sind. Bei falschen Antworten
+  erscheint eine kurze <b>Erklärung</b>. Kurzantwort-Fragen bewertest du anhand der eingeblendeten
+  Musterlösung selbst.
+</div>
+
+<form id="quizform" onsubmit="return false;">
+  <div id="fragen"></div>
+</form>
+
+<div class="actions">
+  <button type="button" class="btn-eval" onclick="auswerten()">✅ Auswerten</button>
+  <button type="button" class="btn-reset" onclick="zuruecksetzen()">↺ Zurücksetzen</button>
+  <div id="ergebnis"></div>
+</div>
+
+<div class="footer">
+  <span id="f-left">Fach</span>
+  <span id="f-mid">LSxx – Lernsituation · Quiz</span>
+  <span id="f-right">Schuljahr 2025/2026</span>
+</div>
+
+<script>
+/* ===================== ANPASSEN: META ===================== */
+const QUIZ_META = {
+  titel:    "LS01 – Quiz: Der Ausbildungsvertrag",
+  sub:      "[Fach] · LS01 · [Schuljahr]",
+  fLeft:    "[Fach]",
+  fMid:     "LS01 – Quiz",
+  fRight:   "Schuljahr 2026/27"
+};
+
+/* ===================== ANPASSEN: FRAGEN =====================
+   mc/multi: optionen[], correct = Index ODER Index-Array
+   match:    pairs:[{term, def}]  (def-Reihenfolge wird gemischt)
+   fill:     accept:["loesung1","loesung2"] (Vergleich ohne Gross-/Kleinschreibung)
+   short:    musterloesung:"..."  (Selbstkontrolle)
+   explain:  Erklaerung (wird bei falsch / immer angezeigt)
+   BEISPIELFRAGEN – vor dem Einsatz fachlich pruefen und ersetzen.
+*/
+const QUIZ_DATA = [
+  { typ:"mc", frage:"Wie lange darf die Probezeit in der Ausbildung höchstens dauern?",
+    optionen:["1 Monat","4 Monate","6 Monate","12 Monate"], correct:1,
+    explain:"Die Probezeit dauert mindestens einen und höchstens vier Monate (§ 20 BBiG)." },
+  { typ:"multi", frage:"Welche Pflichten haben Auszubildende? (mehrere)",
+    optionen:["Lernpflicht","Berufsschule besuchen","Ausbildungsnachweis führen","Ausbildungsplan erstellen"], correct:[0,1,2],
+    explain:"Den Ausbildungsplan erstellt der Betrieb. Lernen, Berufsschule und Ausbildungsnachweis sind Pflichten der Auszubildenden (§ 13 BBiG)." },
+  { typ:"match", frage:"Ordnen Sie die Lernorte zu.",
+    pairs:[{term:"Ausbildungsbetrieb", def:"praktische Ausbildung nach Ausbildungsrahmenplan"},{term:"Berufsschule", def:"Unterricht nach Bildungsplan"}],
+    explain:"Duale Ausbildung: zwei Lernorte mit eigenen Plänen." },
+  { typ:"short", frage:"Nennen Sie zwei Inhalte, die in jedem Ausbildungsvertrag stehen müssen.",
+    musterloesung:"Zum Beispiel: Beginn und Dauer der Ausbildung, Dauer der Probezeit, Höhe der Vergütung (§ 11 BBiG)." }
+];
+/* ================== ENDE ANPASSEN ================== */
+
+const TYP_LABEL = {mc:"Multiple Choice", multi:"Mehrfachauswahl", match:"Zuordnung", fill:"Lückentext", short:"Kurzantwort"};
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function norm(s){return (s||"").toString().trim().toLowerCase().replace(/\s+/g," ").replace(/[.;]+$/,"");}
+
+document.getElementById("q-titel").textContent = QUIZ_META.titel;
+document.getElementById("q-sub").textContent = QUIZ_META.sub;
+document.getElementById("f-left").textContent = QUIZ_META.fLeft;
+document.getElementById("f-mid").textContent = QUIZ_META.fMid;
+document.getElementById("f-right").textContent = QUIZ_META.fRight;
+
+const cont = document.getElementById("fragen");
+QUIZ_DATA.forEach((q,i)=>{
+  const box=document.createElement("div"); box.className="frage"; box.id="frage-"+i;
+  let html=`<div class="frage-kopf"><span class="frage-nr">Frage ${i+1}</span><span>${q.frage}</span><span class="frage-typ">${TYP_LABEL[q.typ]||""}</span></div>`;
+  if(q.typ==="mc"||q.typ==="multi"){
+    const inp = q.typ==="mc"?"radio":"checkbox";
+    q.optionen.forEach((opt,k)=>{ html+=`<label class="option" id="opt-${i}-${k}"><input type="${inp}" name="q${i}" value="${k}"> ${opt}</label>`; });
+  } else if(q.typ==="match"){
+    q._defs = shuffle(q.pairs.map(p=>p.def));
+    q.pairs.forEach((p,k)=>{
+      let opts=`<option value="">– bitte wählen –</option>`;
+      q._defs.forEach((d,di)=>{ opts+=`<option value="${di}">${d}</option>`; });
+      html+=`<div class="match-row"><span class="match-term">${p.term}</span><select id="match-${i}-${k}">${opts}</select></div>`;
+    });
+  } else if(q.typ==="fill"){
+    html+=`<input type="text" class="fill-input" id="fill-${i}" placeholder="Antwort eingeben …">`;
+  } else if(q.typ==="short"){
+    html+=`<textarea id="short-${i}" placeholder="Deine Antwort …"></textarea>`;
+  }
+  html+=`<div class="feedback" id="fb-${i}"></div>`;
+  box.innerHTML=html; cont.appendChild(box);
+});
+
+function auswerten(){
+  let erreicht=0, moeglich=0, selbst=0;
+  QUIZ_DATA.forEach((q,i)=>{
+    const fb=document.getElementById("fb-"+i); fb.className="feedback show";
+    if(q.typ==="mc"){
+      moeglich++; const sel=document.querySelector(`input[name="q${i}"]:checked`);
+      q.optionen.forEach((o,k)=>{document.getElementById(`opt-${i}-${k}`).classList.remove("correct","wrong");});
+      document.getElementById(`opt-${i}-${q.correct}`).classList.add("correct");
+      if(sel && +sel.value===q.correct){erreicht++; fb.classList.add("ok"); fb.innerHTML=`<span class="lbl">✓ Richtig.</span> ${q.explain||""}`;}
+      else{ if(sel) document.getElementById(`opt-${i}-${sel.value}`).classList.add("wrong");
+        fb.classList.add("no"); fb.innerHTML=`<span class="lbl">✗ ${sel?"Leider falsch.":"Nicht beantwortet."}</span> ${q.explain||""}`; }
+    } else if(q.typ==="multi"){
+      moeglich++; const sel=[...document.querySelectorAll(`input[name="q${i}"]:checked`)].map(e=>+e.value).sort();
+      const corr=q.correct.slice().sort();
+      q.optionen.forEach((o,k)=>{const el=document.getElementById(`opt-${i}-${k}`); el.classList.remove("correct","wrong");
+        if(corr.includes(k)) el.classList.add("correct"); else if(sel.includes(k)) el.classList.add("wrong");});
+      const ok = sel.length===corr.length && sel.every((v,x)=>v===corr[x]);
+      if(ok){erreicht++; fb.classList.add("ok"); fb.innerHTML=`<span class="lbl">✓ Richtig.</span> ${q.explain||""}`;}
+      else{fb.classList.add("no"); fb.innerHTML=`<span class="lbl">✗ Nicht vollständig richtig.</span> ${q.explain||""}`;}
+    } else if(q.typ==="match"){
+      moeglich++; let alle=true;
+      q.pairs.forEach((p,k)=>{ const sel=document.getElementById(`match-${i}-${k}`); const richtigDef=p.def;
+        const gewaehlt = sel.value!==""? q._defs[+sel.value] : null;
+        if(gewaehlt===richtigDef){ sel.style.borderColor="var(--ok-bd)"; sel.style.background="var(--ok-bg)"; }
+        else{ alle=false; sel.style.borderColor="var(--no-bd)"; sel.style.background="var(--no-bg)"; } });
+      if(alle){erreicht++; fb.classList.add("ok"); fb.innerHTML=`<span class="lbl">✓ Alle Zuordnungen korrekt.</span> ${q.explain||""}`;}
+      else{fb.classList.add("no"); let sol=q.pairs.map(p=>`<li><b>${p.term}</b> → ${p.def}</li>`).join("");
+        fb.innerHTML=`<span class="lbl">✗ Nicht alle Zuordnungen korrekt.</span><div class="musterloesung"><ul>${sol}</ul></div>`;}
+    } else if(q.typ==="fill"){
+      moeglich++; const val=document.getElementById("fill-"+i).value;
+      const ok=q.accept.some(a=>norm(a)===norm(val));
+      if(ok){erreicht++; fb.classList.add("ok"); fb.innerHTML=`<span class="lbl">✓ Richtig.</span> ${q.explain||""}`;}
+      else{fb.classList.add("no"); fb.innerHTML=`<span class="lbl">✗ Leider falsch.</span> ${q.explain||""} <div class="musterloesung">Akzeptiert: ${q.accept.map(a=>`<code>${a}</code>`).join(" / ")}</div>`;}
+    } else if(q.typ==="short"){
+      selbst++; fb.classList.add("self");
+      fb.innerHTML=`<span class="lbl">📝 Selbstkontrolle:</span> Vergleiche deine Antwort mit der Musterlösung.<div class="musterloesung">${q.musterloesung}</div>`;
+    }
+  });
+  const proz = moeglich? Math.round(erreicht/moeglich*100):0;
+  const note = proz>=92?"1 (sehr gut)":proz>=81?"2 (gut)":proz>=67?"3 (befriedigend)":proz>=50?"4 (ausreichend)":proz>=30?"5 (mangelhaft)":"6 (ungenügend)";
+  const farbe = proz>=50?"var(--color-accent-green)":"var(--color-accent-red)";
+  const erg=document.getElementById("ergebnis"); erg.className="show";
+  erg.innerHTML=`<div class="score">${erreicht} / ${moeglich} Punkten · ${proz}%</div>
+    <div class="bar"><span style="width:${proz}%;background:${farbe}"></span></div>
+    <div class="note" style="color:${farbe}">Note: ${note}</div>
+    ${selbst?`<div style="font-size:9.5pt;color:var(--color-text-muted);margin-top:6px;">+ ${selbst} Kurzantwort(en) zur Selbstkontrolle (nicht eingerechnet).</div>`:""}`;
+  erg.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+function zuruecksetzen(){ document.getElementById("quizform").reset();
+  QUIZ_DATA.forEach((q,i)=>{ const fb=document.getElementById("fb-"+i); fb.className="feedback"; fb.innerHTML="";
+    if(q.typ==="mc"||q.typ==="multi") q.optionen.forEach((o,k)=>document.getElementById(`opt-${i}-${k}`).classList.remove("correct","wrong"));
+    if(q.typ==="match") q.pairs.forEach((p,k)=>{const s=document.getElementById(`match-${i}-${k}`); s.style.borderColor=""; s.style.background=""; s.value="";}); });
+  const erg=document.getElementById("ergebnis"); erg.className=""; erg.innerHTML="";
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+</script>
+</body>
+</html>

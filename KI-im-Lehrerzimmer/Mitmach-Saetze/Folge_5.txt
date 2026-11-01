@@ -1,0 +1,20 @@
+📌 ZUM MITMACHEN – die Sätze aus dem Video zum Kopieren
+Einfach in Claude einfügen oder ins Mikrofon sprechen. Was in [eckigen Klammern] steht, ersetzen Sie durch Ihre Angaben.
+
+Schritt 2 – Lernsituation erstellen lassen
+Mach bitte die Lernsituation [Nummer] aus der Makroplanung, genau nach dem Ablauf in der Werkstatt. Halt nach jedem Schritt kurz an, damit ich drüberschauen kann.
+
+Schritt 3 – Weiter zu Arbeitsblättern und Grafiken
+Passt. Mach weiter mit den Arbeitsblättern und den Grafiken.
+
+Schritt 4 – Prüfen lassen
+Lass jetzt bitte einen zweiten Agenten alles prüfen, der das Material nicht selbst geschrieben hat.
+
+Schritt 4 – Fehler ausbessern (Rückschleife)
+Bessere das bitte aus und lass es nochmal prüfen. Und merk dir als Regel: [Gesetzesangaben immer mit Paragraf].
+
+Schritt 5 – Quiz und Lösung
+Jetzt noch das Quiz und die Lösung für mich.
+
+Erst wenn Sie es wirklich brauchen – Export
+Exportier bitte [die Lernsituation zwei] als [PDF/Word].

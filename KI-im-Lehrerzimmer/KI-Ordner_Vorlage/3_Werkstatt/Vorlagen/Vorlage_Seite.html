@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vorlage – Seite</title>
+<!-- Neutrale Standardvorlage. Wird mit dem Layout-Baukasten durch das eigene Layout ersetzt.
+     Alles steht in dieser einen Datei: Stil hier oben, Inhalt unten. -->
+<style>
+  :root{--haupt:#1F3A5F;--akzent:#2E74B5;--kasten:#F2F4F7;--text:#1B1F24;}
+  @page{size:A4;margin:18mm 16mm;}
+  body{font-family:Arial,Helvetica,sans-serif;color:var(--text);max-width:210mm;margin:0 auto;padding:16px;line-height:1.5;font-size:11pt;}
+  header,footer{display:flex;justify-content:space-between;font-size:9pt;color:#555;border-bottom:1px solid #ccc;padding-bottom:4px;}
+  footer{border-bottom:none;border-top:1px solid #ccc;padding-top:4px;margin-top:32px;}
+  h1{color:var(--haupt);font-size:20pt;margin:16px 0 8px;}
+  h2{color:var(--haupt);font-size:14pt;border-bottom:2px solid var(--akzent);padding-bottom:2px;}
+  .kasten{background:var(--kasten);border-left:4px solid var(--akzent);padding:8px 12px;margin:12px 0;}
+  .kasten b:first-child{display:block;color:var(--haupt);}
+  table{border-collapse:collapse;width:100%;}td,th{border:1px solid #bbb;padding:4px 8px;}th{background:var(--kasten);text-align:left;}
+</style>
+</head>
+<body>
+<header><span>[Fach] · LSxx</span><span>Schuljahr 2026/27</span></header>
+<h1>Titel der Seite</h1>
+<p>Einstieg in einem Satz.</p>
+<h2>Abschnitt</h2>
+<p>Text …</p>
+<div class="kasten"><b>Merken</b>Die drei wichtigsten Punkte.</div>
+<div class="kasten"><b>Aufgabe</b>Arbeitsauftrag …</div>
+<footer><span>Titel der Seite</span><span>Schuljahr 2026/27</span></footer>
+</body>
+</html>

@@ -1,0 +1,23 @@
+📌 ZUM MITMACHEN – die Sätze aus dem Video zum Kopieren
+Einfach in Claude einfügen oder ins Mikrofon sprechen. Was in [eckigen Klammern] steht, ersetzen Sie durch Ihre Angaben. Grammatik egal – Hauptsache, es hat Hand und Fuß.
+
+Schritt 2 – LIESMICH ausfüllen
+Ich unterrichte [Fach] an der [Schulart] in [Bundesland], nach dem Bildungsplan [Jahr]. Anfangen will ich mit [Lernfeld/Kompetenzbereich], das sind [Zahl] Stunden. Der Bildungsplan liegt im Eingang. Trag das bitte in die LIESMICH ein.
+
+Korrigieren, wenn etwas nicht stimmt
+Es sind nicht [Zahl], sondern [Zahl] Stunden.
+
+Schritt 3 – REGELN ergänzen
+Für meine Arbeitsblätter: Oben in der Kopfzeile soll immer [das Fach und die Klasse] stehen. Auf jedes Blatt kommt [ein Merkkasten mit dem Wichtigsten]. Die Lernenden [sieze/duze] ich. Trag das bitte in die Regeln ein.
+
+Später bei jeder Korrektur
+Merk dir das als Regel.
+
+Schritt 4 – Am Ende jeder Sitzung
+Wir machen für heute Schluss. Trag bitte den Stand in die Status-Datei ein.
+
+Schritt 5 – Zu Beginn jeder neuen Sitzung
+Lies dich bitte ein und sag mir, wo wir stehen und was als Nächstes ansteht.
+
+Vor jedem größeren Umbau
+Sichere bitte den Stand.

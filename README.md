@@ -2,6 +2,16 @@
 
 Hier liegen die PDFs zu den Lernvideos auf dem YouTube-Kanal [Deine Lerncouch](https://www.youtube.com/@mrgerman3999).
 
+## KI im Lehrerzimmer – Unterricht mit KI-Agenten vorbereiten
+
+Starter-Ordner, Layout-Baukasten und alle Sätze zum Mitmachen: **[KI-im-Lehrerzimmer](KI-im-Lehrerzimmer)**
+
+| Download | |
+|---|---|
+| [Starter-Ordner (ZIP)](KI-im-Lehrerzimmer/KI-Ordner_Vorlage.zip) | ab Folge 2 |
+| [Layout-Baukasten (ZIP)](KI-im-Lehrerzimmer/Layout-Baukasten.zip) | Folge 3 |
+| [Sätze zum Mitmachen](KI-im-Lehrerzimmer/Mitmach-Saetze) | Folgen 2–6 |
+
 ## Netzwerktechnik mit Filius (Lernfeld 3)
 
 Filius gibt es kostenlos unter [lernsoftware-filius.de](https://www.lernsoftware-filius.de). Laden Sie die Startdatei herunter, öffnen Sie sie in Filius und machen Sie im Video mit.

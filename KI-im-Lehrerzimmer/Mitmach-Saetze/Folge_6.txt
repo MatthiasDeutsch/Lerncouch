@@ -1,0 +1,23 @@
+📌 ZUM MITMACHEN – die Sätze aus dem Video zum Kopieren
+Einfach in Claude einfügen oder ins Mikrofon sprechen. Was in [eckigen Klammern] steht, ersetzen Sie durch Ihre Angaben.
+
+Schritt 1 – PDF und Word (Export nur auf Anweisung)
+Exportier bitte [die Lernsituation zwei mit Arbeitsblatt] als PDF für den Ausdruck. Und [das Arbeitsblatt] zusätzlich als Word-Datei für meine Kollegin.
+
+Schritt 2 – Moodle-Test
+Mach mir aus dem Quiz bitte eine Datei, die ich in Moodle als Test importieren kann.
+(In Moodle: Fragensammlung → Import → Format „Moodle-XML“ → Datei hochladen.)
+
+Schritt 3 – Kurzes Lernvideo (braucht einen Sprach-Dienst als Konnektor, z. B. ElevenLabs)
+Mach mir zu [Thema] ein kurzes Erklärvideo, höchstens eine Minute, mit dem Schaubild aus dem Arbeitsblatt. Zeig mir vorher den Sprechtext.
+
+Schritt 4 – Handreichung mit Bildschirmfotos (Computer-Use)
+Schreib mir bitte eine Anleitung für [Kolleginnen und Kollegen / Lernende]: [Wie mache ich …?] Mach die Schritte selbst am Bildschirm und nimm Bildschirmfotos auf.
+
+Vor der Weitergabe
+Zeig mir bitte alle Bilder der Anleitung, bevor du sie speicherst.
+
+Wenn Sie etwas an der Quelle ändern
+Ich habe die Lernsituation geändert. Erzeug bitte PDF, Word und den Moodle-Test neu.
+
+Welches Thema wünschen Sie sich als nächstes Erklärvideo? Schreiben Sie es gern hier drunter.

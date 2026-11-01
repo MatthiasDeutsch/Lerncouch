@@ -1,0 +1,20 @@
+📌 ZUM MITMACHEN – die Sätze aus dem Video zum Kopieren
+Einfach in Claude einfügen oder ins Mikrofon sprechen. Was in [eckigen Klammern] steht, ersetzen Sie durch Ihre Angaben.
+
+Schritt 2 – Der Auftrag (Weg A und B)
+Ich möchte jetzt [Lernfeld/Kompetenzbereich] planen, [Zahl] Stunden. Nimm den Bildungsplan und den Skill Planung. Modellbetrieb ist [Betrieb, Ort], die Auszubildende heißt [Name]. Mach mir einen Vorschlag.
+
+Zusatz nur für Weg B (alte Unterlagen)
+Schau dir vorher meine alten Unterlagen an und mach eine Tabelle: Was passt, was fehlt, was ist veraltet. Ich möchte mein Material [neu aufbauen / nur angleichen].
+
+Schritt 3 – Prüfen lassen
+Prüf bitte: Ist alles aus dem Bildungsplan abgedeckt, stimmen die Stunden, und hat jede Lernsituation höchstens zwei Fachthemen?
+
+Schritt 4 – Ändern
+[Lernsituation X] bitte nur [Zahl] Stunden, die freie Stunde bekommt [Lernsituation Y]. Und bei [Thema] brauch ich mehr Alltag, die Klasse ist da eher schwach.
+
+Schritt 4 – Freigeben
+Passt. Die Makroplanung ist freigegeben. Trag das bitte in die Status-Datei ein.
+
+Beim nächsten Mal
+Lies dich bitte ein und sag mir, wo wir stehen.

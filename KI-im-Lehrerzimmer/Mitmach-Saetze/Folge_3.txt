@@ -1,0 +1,14 @@
+📌 ZUM MITMACHEN – die Sätze aus dem Video zum Kopieren
+Einfach in Claude einfügen oder ins Mikrofon sprechen. Was in [eckigen Klammern] steht, ersetzen Sie durch Ihre Angaben.
+
+Weg B – Layout aus einem eigenen Blatt ableiten (Datei vorher über das Plus anhängen)
+Das ist ein [Informationsblatt] von mir, das Layout gefällt mir sehr gut. Leite bitte daraus meine Layoutregeln ab und speicher sie in der Layout-Datei. Mach auch die Vorlage-Seite passend. Und unterscheide die Blattarten wie bei mir mit dem Farbbalken oben.
+
+Weg A – Layout aus dem Baukasten übernehmen (vorher „Regeln für Claude kopieren“ und einfügen)
+Das ist mein Layout aus dem Baukasten. Trag das bitte in die Layout-Datei ein und mach die Vorlage-Seite passend dazu.
+
+Schritt 5 – Der Test
+Erstell mir bitte das Informationsblatt zum [Thema] mit einem Schaubild zu [Inhalt des Schaubilds] – und ein kurzes Quiz dazu.
+
+Wenn etwas am Layout nicht passt
+[Die Überschriften etwas größer], bitte. Merk dir das als Regel.

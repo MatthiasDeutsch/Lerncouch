@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Layout-Baukasten</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: zwei Spalten – links die Bedienung in drei Schritten, rechts das Musterblatt als Papier. Auf dem Handy untereinander. */
+:root{
+  --bg:#EEF1F4; --panel:#FFFFFF; --ink:#18212B; --muted:#5A6672; --line:#D5DCE3;
+  --accent:#2F5BD3; --accent-weak:#E3EAFB; --focus:#F2A20C;
+  --good:#1E7A46; --warn:#A86A00; --bad:#B3261E;
+  --desk:#DDE3EA;
+  --font-ui: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: Consolas, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141A21; --panel:#1C242D; --ink:#E8EDF2; --muted:#9AA7B4; --line:#2E3A46;
+  --accent:#7C9BF2; --accent-weak:#24304A; --desk:#0F141A; color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#141A21; --panel:#1C242D; --ink:#E8EDF2; --muted:#9AA7B4; --line:#2E3A46;
+  --accent:#7C9BF2; --accent-weak:#24304A; --desk:#0F141A; color-scheme:dark;}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-ui);font-size:15px;line-height:1.45;margin:0}
+.wrap{max-width:1400px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 40px}
+header.app{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;margin-bottom:16px}
+header.app h1{font-size:1.65rem;margin:0;letter-spacing:-.01em;text-wrap:balance}
+header.app p{margin:2px 0 0;color:var(--muted)}
+.steps{display:flex;gap:6px;flex-wrap:wrap}
+.steps button{display:flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:7px 14px 7px 7px;font:inherit;cursor:pointer}
+.steps button .n{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--line);font-weight:700;font-size:.85rem}
+.steps button[aria-current="step"]{border-color:var(--accent);background:var(--accent-weak)}
+.steps button[aria-current="step"] .n{background:var(--accent);color:#fff}
+.grid{display:grid;grid-template-columns:minmax(320px,420px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px;min-width:0}
+.panel h2{font-size:1.15rem;margin:0 0 4px}
+.panel .hint{color:var(--muted);margin:0 0 14px}
+.step[hidden]{display:none!important}
+.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.card{border:2px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);padding:8px;text-align:left;font:inherit;cursor:pointer;display:flex;flex-direction:column;gap:6px;min-width:0}
+.card:hover{border-color:var(--muted)}
+.card[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-weak)}
+.card b{font-size:.95rem}.card small{color:var(--muted);font-size:.8rem;line-height:1.3}
+.mini{background:#fff;border-radius:6px;height:74px;padding:7px;display:flex;flex-direction:column;gap:5px;border:1px solid #e3e6ea;overflow:hidden}
+.mini .t{height:9px;width:62%;border-radius:2px}
+.mini .l{height:4px;background:#d9dde2;border-radius:2px}
+.mini .k{height:20px;border-radius:3px;margin-top:2px}
+.group{margin-bottom:18px}
+.group > .label{display:flex;justify-content:space-between;align-items:baseline;font-weight:650;margin-bottom:8px}
+.group > .label span{font-weight:400;color:var(--muted);font-size:.85rem}
+.swatches{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.swatch{width:34px;height:34px;border-radius:50%;border:3px solid var(--panel);box-shadow:0 0 0 1px var(--line);cursor:pointer;padding:0}
+.swatch[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.own{display:flex;align-items:center;gap:6px;font-size:.85rem;color:var(--muted)}
+.own input{width:38px;height:34px;border:1px solid var(--line);border-radius:8px;padding:2px;background:var(--panel)}
+.opts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.opt{border:2px solid var(--line);border-radius:10px;background:var(--panel);color:var(--ink);font:inherit;cursor:pointer;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.82rem;min-width:0}
+.opt[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-weak)}
+.opt .pic{width:100%;height:38px;background:#fff;border-radius:5px;border:1px solid #e3e6ea;display:flex;flex-direction:column;justify-content:center;padding:4px 6px;gap:4px;color:#222}
+.opt .aa{font-size:1.4rem;line-height:1}
+.fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.fields label{display:flex;flex-direction:column;gap:3px;font-size:.82rem;color:var(--muted);min-width:0}
+.fields input[type=text]{font:inherit;color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:7px 9px;width:100%}
+.fields .wide{grid-column:1/-1}
+.logo-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.nav{display:flex;justify-content:space-between;gap:8px;margin-top:8px}
+.btn{font:inherit;border-radius:9px;padding:9px 14px;border:1px solid var(--line);background:var(--panel);color:var(--ink);cursor:pointer}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:600}
+:root[data-theme="dark"] .btn.primary{color:#0D1320}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn.primary{color:#0D1320}}
+.btn.big{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:left;padding:12px 14px}
+.btn.big small{color:inherit;opacity:.8;font-weight:400}
+.btn:disabled{opacity:.45;cursor:default}
+.export{display:flex;flex-direction:column;gap:10px}
+textarea.code{width:100%;min-height:180px;font-family:var(--font-mono);font-size:.78rem;background:var(--bg);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:10px;resize:vertical}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--panel);padding:9px 16px;border-radius:999px;font-weight:600;z-index:20}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+/* Vorschau */
+.previewbar{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between;margin-bottom:10px}
+.ampel{display:flex;align-items:center;gap:8px;font-size:.9rem;min-width:0}
+.ampel .dot{width:14px;height:14px;border-radius:50%;flex:none}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.toggle{display:flex;align-items:center;gap:6px;font-size:.88rem;cursor:pointer}
+.desk{background:var(--desk);border-radius:12px;padding:20px;min-width:0;overflow:hidden}
+.paperbox{margin:0 auto;position:relative}
+.paper{width:794px;transform-origin:top left;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.18);position:absolute;top:0;left:0}
+.paper.sw{filter:grayscale(1) contrast(1.15)}
+.note{color:var(--muted);font-size:.82rem;margin:10px 0 0}
+.typen{display:flex;flex-direction:column;gap:6px}
+.typrow{display:grid;grid-template-columns:44px minmax(0,1fr) auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:9px;padding:5px 8px}
+.typrow input[type=color]{width:40px;height:30px;border:1px solid var(--line);border-radius:6px;padding:2px;background:var(--panel)}
+.typrow .tn{font-weight:600;font-size:.9rem}.typrow .tk{font-family:var(--font-mono);font-size:.78rem;color:var(--muted)}
+.typtabs{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.typtabs button{font:inherit;font-size:.82rem;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:4px 11px;cursor:pointer;display:flex;align-items:center;gap:6px}
+.typtabs button i{width:10px;height:10px;border-radius:50%;display:inline-block}
+.typtabs button[aria-pressed="true"]{border-color:var(--accent);background:var(--accent-weak);font-weight:600}
+.switch{display:flex;align-items:center;gap:8px;font-size:.9rem;cursor:pointer;margin-bottom:8px}
+@media (prefers-reduced-motion:no-preference){.card,.opt,.swatch{transition:border-color .15s,box-shadow .15s}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="app">
+    <div>
+      <h1>Layout-Baukasten</h1>
+      <p>Ein einheitliches Layout für alle Blätter – Lernsituation, Informationsblatt, Quiz, Lösung – in drei Schritten. Läuft ohne Internet, einfach herunterladen und im Browser öffnen.</p>
+    </div>
+    <nav class="steps" aria-label="Schritte">
+      <button type="button" data-go="1" aria-current="step"><span class="n">1</span>Stil wählen</button>
+      <button type="button" data-go="2"><span class="n">2</span>Anpassen</button>
+      <button type="button" data-go="3"><span class="n">3</span>Mitnehmen</button>
+    </nav>
+  </header>
+
+  <div class="grid">
+    <section class="panel" aria-label="Einstellungen">
+      <!-- Schritt 1 -->
+      <div class="step" id="step1">
+        <h2>1 · Stil wählen</h2>
+        <p class="hint">Ein Klick genügt – in der Vorschau sehen Sie sofort das Ergebnis. Anpassen können Sie im nächsten Schritt.</p>
+        <div class="cards" id="presetCards"></div>
+        <div class="nav"><span></span><button class="btn primary" type="button" data-go="2">Weiter: Anpassen</button></div>
+      </div>
+
+      <!-- Schritt 2 -->
+      <div class="step" id="step2" hidden>
+        <h2>2 · Kleinigkeiten anpassen</h2>
+        <p class="hint">Alles ist schon passend eingestellt. Ändern Sie nur, was Ihnen nicht gefällt.</p>
+
+        <div class="group">
+          <div class="label">Hauptfarbe <span>Kästen und Töne werden passend berechnet</span></div>
+          <div class="swatches" id="swatches"></div>
+        </div>
+        <div class="group">
+          <div class="label">Schrift <span>auf jedem Schulrechner und in Word vorhanden</span></div>
+          <div class="opts" id="fontOpts"></div>
+        </div>
+        <div class="group">
+          <div class="label">Kopfbereich <span>oben auf jedem Blatt</span></div>
+          <div class="opts" id="kopfOpts" style="grid-template-columns:repeat(2,minmax(0,1fr))"></div>
+        </div>
+        <div class="group">
+          <div class="label">Blattarten unterscheiden <span>jede Art mit eigener Farbe</span></div>
+          <label class="switch"><input type="checkbox" id="typToggle"> Farbe zeigt, was für ein Blatt es ist</label>
+          <div class="typen" id="typRows"></div>
+        </div>
+        <div class="group">
+          <div class="label">Überschriften</div>
+          <div class="opts" id="headOpts"></div>
+        </div>
+        <div class="group">
+          <div class="label">Kästen <span>Merken · Wichtig · Aufgabe · Tipp · Achtung</span></div>
+          <div class="opts" id="boxOpts"></div>
+        </div>
+        <div class="group">
+          <div class="label">Icons <span>kleine Symbole als Orientierung</span></div>
+          <div class="opts" id="iconOpts"></div>
+        </div>
+        <div class="group">
+          <div class="label">Bilder und Grafiken</div>
+          <div class="opts" id="bildOpts"></div>
+        </div>
+        <div class="group">
+          <div class="label">Code, Formeln, Befehle</div>
+          <div class="opts" id="codeOpts"></div>
+        </div>
+        <div class="group">
+          <div class="label">Verweise auf andere Blätter</div>
+          <div class="opts" id="verweisOpts"></div>
+        </div>
+        <div class="group">
+          <div class="label">Kopf- und Fußzeile</div>
+          <div class="fields">
+            <label>Fach<input type="text" id="f_fach"></label>
+            <label>Klasse<input type="text" id="f_klasse"></label>
+            <label>Schuljahr<input type="text" id="f_jahr"></label>
+            <label>Schule (optional)<input type="text" id="f_schule" placeholder="leer lassen möglich"></label>
+            <div class="wide logo-row">
+              <label class="btn" for="f_logo" style="flex-direction:row;color:var(--ink)">Logo hinzufügen</label>
+              <input type="file" id="f_logo" accept="image/png,image/jpeg,image/svg+xml" hidden>
+              <button type="button" class="btn" id="logoRemove" hidden>Logo entfernen</button>
+              <span class="note" id="logoInfo" style="margin:0">optional, PNG, JPG oder SVG</span>
+            </div>
+          </div>
+        </div>
+        <div class="nav"><button class="btn" type="button" data-go="1">Zurück</button><button class="btn primary" type="button" data-go="3">Weiter: Mitnehmen</button></div>
+      </div>
+
+      <!-- Schritt 3 -->
+      <div class="step" id="step3" hidden>
+        <h2>3 · Mitnehmen</h2>
+        <p class="hint">Fertig. So geben Sie Ihr Layout an Claude weiter.</p>
+        <div class="export">
+          <button class="btn primary big" type="button" id="copyRules"><span>Regeln für Claude kopieren</span><small>In die Datei „Layout.md“ Ihres Ordners einfügen – fertig.</small></button>
+          <button class="btn big" type="button" id="dlTemplate"><span>Vorlage herunterladen</span><small>Eine einzige HTML-Datei mit dem Musterblatt, als „Vorlage_Seite.html“ in den Ordner „Vorlagen“.</small></button>
+          <button class="btn big" type="button" id="dlSettings"><span>Einstellungen speichern</span><small>Später hier wieder laden und weiterbearbeiten.</small></button>
+          <label class="btn big" for="ulSettings"><span>Einstellungen laden</span><small>Eine gespeicherte Datei öffnen.</small></label>
+          <input type="file" id="ulSettings" accept="application/json,.json" hidden>
+        </div>
+        <div class="group" style="margin-top:16px">
+          <div class="label">Vorschau der Regeln <span>zum Nachlesen oder Kopieren</span></div>
+          <textarea class="code" id="rulesOut" readonly aria-label="Regeln für Claude"></textarea>
+        </div>
+        <p class="note">Klappt das Herunterladen nicht (z. B. in einer gesperrten Vorschau), öffnen Sie diese Datei direkt im Browser, Edge oder Firefox.</p>
+        <div class="nav"><button class="btn" type="button" data-go="2">Zurück</button><span></span></div>
+      </div>
+    </section>
+
+    <section aria-label="Vorschau">
+      <div class="previewbar">
+        <div class="ampel" id="ampel"><span class="dot"></span><span class="txt"></span><button type="button" class="btn" id="fixContrast" hidden>Automatisch verbessern</button></div>
+        <div class="tools">
+          <label class="toggle"><input type="checkbox" id="swToggle"> Schwarzweiß-Kopie</label>
+          <button type="button" class="btn" id="undo" disabled>Rückgängig</button>
+          <button type="button" class="btn" id="reset">Alles zurücksetzen</button>
+        </div>
+      </div>
+      <div class="typtabs" id="typTabs" role="group" aria-label="Vorschau als"></div>
+      <div class="desk" id="desk">
+        <div class="paperbox" id="paperbox"><div class="paper" id="paper"></div></div>
+      </div>
+      <p class="note">Musterblatt mit Beispielinhalt. Ihre echten Inhalte erstellt später Claude – im Layout, das Sie hier festlegen.</p>
+    </section>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+"use strict";
+const FONTS = {
+  sachlich:{name:"Sachlich", stack:"Arial, Helvetica, sans-serif", word:"Arial"},
+  freundlich:{name:"Freundlich", stack:"Verdana, Geneva, sans-serif", word:"Verdana"},
+  klassisch:{name:"Klassisch", stack:"Georgia, 'Times New Roman', serif", word:"Georgia"}
+};
+const HEADS = {balken:"mit Farbbalken", linie:"unterstrichen", schlicht:"schlicht"};
+const BOXES = {kante:"farbige Kante", gefuellt:"gefüllt", umrandet:"umrandet"};
+const BILDER = {rahmen:"mit Rahmen", schlicht:"schlicht", karte:"als Karte"};
+const CODES = {hell:"hell", dunkel:"dunkel", einfach:"nur Schriftart"};
+const VERWEISE = {chip:"als Knopf", link:"unterstrichen", hinweis:"als Hinweis"};
+const ICONMENGE = {wenige:"wenige", mittel:"mittel", viele:"viele"};
+const ICON = {
+  merken:'<path d="M7 3h10v18l-5-3.5L7 21z"/>',
+  wichtig:'<circle cx="12" cy="12" r="9"/><path d="M12 7v6"/><path d="M12 16.5v.5"/>',
+  aufgabe:'<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13 7l4 4"/>',
+  tipp:'<path d="M9 18h6"/><path d="M10 21h4"/><path d="M12 3a6 6 0 0 0-4 10.4c.8.8 1 1.6 1 2.6h6c0-1 .2-1.8 1-2.6A6 6 0 0 0 12 3z"/>',
+  achtung:'<path d="M12 3l10 18H2z"/><path d="M12 10v5"/><path d="M12 18v.5"/>',
+  datei:'<path d="M6 2h8l5 5v15H6z"/><path d="M14 2v5h5"/>',
+  bild:'<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 17l5-5 4 4 3-3 6 6"/><circle cx="15.5" cy="8.5" r="1.5"/>',
+  abschnitt:'<path d="M4 6h16"/><path d="M4 12h12"/><path d="M4 18h8"/>'
+};
+function ic(name,cls){return `<svg class="ic ${cls||""}" viewBox="0 0 24 24" aria-hidden="true">${ICON[name]}</svg>`;}
+const SWATCHES =["#1F4E79","#2F5BD3","#0E6E74","#2E7D5B","#5B7A1E","#B5521B","#A3262F","#8A2E6B","#6A3FA0","#3D4852"];
+const PRESETS = [
+  {id:"farbcode",name:"Klar & farbcodiert", desc:"Farbbalken oben – jede Blattart eigene Farbe", farbe:"#1F4D78", schrift:"sachlich", ueber:"linie", kasten:"kante", bunt:true, groesse:11, bild:"rahmen", code:"dunkel", verweis:"chip", icons:"mittel", kopf:"balken", typen:true},
+  {id:"blau",  name:"Klassisch Blau",  desc:"ruhig, sachlich, bewährt",            farbe:"#1F4E79", schrift:"sachlich",  ueber:"linie",   kasten:"kante",    bunt:true,  groesse:11,   bild:"rahmen",  code:"hell",    verweis:"link",    icons:"wenige"},
+  {id:"gruen", name:"Frisch Grün",     desc:"hell und freundlich",                 farbe:"#2E7D5B", schrift:"freundlich",ueber:"balken",  kasten:"gefuellt", bunt:false, groesse:11,   bild:"karte",   code:"hell",    verweis:"chip",    icons:"mittel"},
+  {id:"orange",name:"Warm Orange",     desc:"warm, lebendig, klar",                farbe:"#B5521B", schrift:"freundlich",ueber:"schlicht",kasten:"kante",    bunt:false, groesse:11,   bild:"schlicht",code:"hell",    verweis:"chip",    icons:"mittel"},
+  {id:"grau",  name:"Ruhig Grau",      desc:"zurückhaltend, kopierfreundlich",     farbe:"#3D4852", schrift:"sachlich",  ueber:"linie",   kasten:"umrandet", bunt:false, groesse:11,   bild:"rahmen",  code:"einfach", verweis:"hinweis", icons:"wenige"},
+  {id:"lesbar",name:"Gut lesbar",      desc:"starker Kontrast, größere Schrift",   farbe:"#0B3D91", schrift:"sachlich",  ueber:"balken",  kasten:"umrandet", bunt:true,  groesse:12.5, bild:"rahmen",  code:"hell",    verweis:"link",    icons:"mittel"},
+  {id:"bunt",  name:"Freundlich bunt", desc:"jede Kastenart mit eigener Farbe",    farbe:"#6A3FA0", schrift:"freundlich",ueber:"balken",  kasten:"gefuellt", bunt:true,  groesse:11,   bild:"karte",   code:"dunkel",  verweis:"chip",    icons:"viele"}
+];
+const TYPEN = {
+  ls:{name:"Lernsituation", kurz:"LS", farbe:"#1F4D78"},
+  ib:{name:"Informationsblatt", kurz:"IB", farbe:"#1E6B3C"},
+  quiz:{name:"Quiz", kurz:"Quiz", farbe:"#5B2A86"},
+  loesung:{name:"Lösung · nur Lehrkraft", kurz:"Loesung", farbe:"#8E2222"},
+  hr:{name:"Anleitung / Handreichung", kurz:"HR", farbe:"#9A4A00"}
+};
+const KOEPFE = {balken:"Farbbalken mit Etikett", linie:"schlichte Kopfzeile"};
+function typDefaults(){const o={};for(const k in TYPEN)o[k]=TYPEN[k].farbe;return o;}
+const NEW_DEFAULTS = {bild:"rahmen", code:"hell", verweis:"link", icons:"wenige", kopf:"linie", typen:false, typFarben:typDefaults(), vtyp:"ib"};
+const DEFAULT_TEXT = {fach:"Wirtschaftskompetenz", klasse:"Klasse 1", jahr:"Schuljahr 2026/27", schule:""};
+
+/* ---------- Farbrechnung ---------- */
+function hexToRgb(h){h=h.replace("#","");if(h.length===3)h=h.split("").map(c=>c+c).join("");const n=parseInt(h,16);return [(n>>16)&255,(n>>8)&255,n&255];}
+function rgbToHex(r,g,b){return "#"+[r,g,b].map(v=>Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,"0")).join("").toUpperCase();}
+function rgbToHsl(r,g,b){r/=255;g/=255;b/=255;const mx=Math.max(r,g,b),mn=Math.min(r,g,b);let h=0,s=0;const l=(mx+mn)/2;if(mx!==mn){const d=mx-mn;s=l>.5?d/(2-mx-mn):d/(mx+mn);h=mx===r?(g-b)/d+(g<b?6:0):mx===g?(b-r)/d+2:(r-g)/d+4;h/=6;}return [h*360,s,l];}
+function hslToRgb(h,s,l){h=((h%360)+360)%360/360;if(s===0)return [l*255,l*255,l*255];const q=l<.5?l*(1+s):l+s-l*s,p=2*l-q;const f=t=>{t=(t+1)%1;if(t<1/6)return p+(q-p)*6*t;if(t<1/2)return q;if(t<2/3)return p+(q-p)*(2/3-t)*6;return p;};return [f(h+1/3)*255,f(h)*255,f(h-1/3)*255];}
+function mix(hex,withHex,amt){const a=hexToRgb(hex),b=hexToRgb(withHex);return rgbToHex(a[0]+(b[0]-a[0])*amt,a[1]+(b[1]-a[1])*amt,a[2]+(b[2]-a[2])*amt);}
+function lum(hex){const c=hexToRgb(hex).map(v=>{v/=255;return v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4);});return .2126*c[0]+.7152*c[1]+.0722*c[2];}
+function contrast(a,b){const x=lum(a),y=lum(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);}
+function shiftHue(hex,deg,minL,maxL){const [h,s,l]=rgbToHsl(...hexToRgb(hex));const rgb=hslToRgb(h+deg,Math.max(s,.45),Math.min(Math.max(l,minL),maxL));return rgbToHex(...rgb);}
+function darkenToContrast(hex,target){let [h,s,l]=rgbToHsl(...hexToRgb(hex));let out=hex,guard=0;while(contrast(out,"#FFFFFF")<target&&guard<60){l=Math.max(0,l-.02);out=rgbToHex(...hslToRgb(h,s,l));guard++;}return out;}
+
+function palette(st){
+  const main=st.farbe;
+  const fixed={merken:main,wichtig:"#8F5300",aufgabe:main,tipp:"#2E7D32",achtung:"#B3261E"};
+  let kinds;
+  if(st.bunt){kinds={merken:main,wichtig:"#8F5300",aufgabe:shiftHue(main,160,.26,.34),tipp:"#2E7D32",achtung:"#B3261E"};}
+  else{kinds=fixed;}
+  const out={main, text:"#1B1F24", soft:mix(main,"#FFFFFF",.9), line:mix(main,"#FFFFFF",.55)};
+  for(const k in kinds){const c=darkenToContrast(kinds[k],4.5);out[k]={c, tint:mix(c,"#FFFFFF",.9), edge:mix(c,"#FFFFFF",.35)};}
+  return out;
+}
+
+/* ---------- CSS für Vorschau und Vorlage ---------- */
+function sheetCss(st,scope){
+  const p=palette(st), f=FONTS[st.schrift].stack, s=scope?scope+" ":"";
+  const root=scope||"body";
+  let head2;
+  if(st.ueber==="balken") head2=`background:${p.main};color:#fff;padding:4px 10px;border-radius:3px;`;
+  else if(st.ueber==="linie") head2=`color:${p.main};border-bottom:2px solid ${p.main};padding-bottom:2px;`;
+  else head2=`color:${p.main};`;
+  const box=k=>{const c=p[k];
+    if(st.kasten==="kante") return `${s}.kasten.${k}{background:${c.tint};border-left:5px solid ${c.c};}${s}.kasten.${k} .kt{color:${c.c};}`;
+    if(st.kasten==="gefuellt") return `${s}.kasten.${k}{background:${c.tint};border-radius:8px;}${s}.kasten.${k} .kt{background:${c.c};color:#fff;margin:-8px -12px 6px;padding:4px 12px;border-radius:8px 8px 0 0;}`;
+    return `${s}.kasten.${k}{background:#fff;border:2px solid ${c.c};border-radius:4px;}${s}.kasten.${k} .kt{color:${c.c};}`;};
+  return `${root}{font-family:${f};font-size:${st.groesse}pt;line-height:1.5;color:${p.text};background:#fff;}
+${s}.blatt{padding:15mm 16mm;}
+${typCss(st,s)}
+${s}.kopf,${s}.fuss{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:8.5pt;color:#555;}
+${s}.kopf{border-bottom:1.5px solid ${p.main};padding-bottom:5px;margin-bottom:14px;}
+${s}.kopf img{max-height:28px;max-width:120px;}
+${s}.kopf .links{display:flex;align-items:center;gap:10px;}
+${s}.fuss{border-top:1px solid ${p.line};padding-top:5px;margin-top:22px;}
+${s}h1{font-size:${(st.groesse*1.75).toFixed(1)}pt;color:${p.main};margin:6px 0 4px;line-height:1.2;}
+${s}.unter{color:#555;margin:0 0 12px;}
+${s}h2{font-size:${(st.groesse*1.22).toFixed(1)}pt;margin:16px 0 8px;${head2}}
+${s}p{margin:0 0 8px;}
+${s}.kasten{padding:8px 12px;margin:10px 0;}
+${s}.kasten .kt{font-weight:bold;display:block;margin-bottom:3px;}
+${box("merken")}${box("wichtig")}${box("aufgabe")}${box("tipp")}${box("achtung")}
+${s}.ic{width:1.15em;height:1.15em;vertical-align:-.2em;margin-right:.35em;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+${s}figure.abb{margin:12px 0;}
+${s}figure.abb svg.illu{display:block;width:100%;max-width:340px;height:auto;}
+${s}figure.abb figcaption{font-size:.88em;color:#555;margin-top:5px;}
+${s}figure.abb figcaption b{color:${p.main};}
+${st.bild==="rahmen"?`${s}figure.abb{border:1px solid ${p.line};padding:8px;display:inline-block;}`:""}
+${st.bild==="karte"?`${s}figure.abb{background:${p.soft};border-radius:10px;padding:12px 14px;}`:""}
+${s}pre.code{font-family:Consolas,"Courier New",monospace;font-size:.9em;margin:8px 0;padding:8px 12px;white-space:pre-wrap;}
+${s}code{font-family:Consolas,"Courier New",monospace;font-size:.92em;}
+${st.code==="hell"?`${s}pre.code{background:#F4F6F8;border-left:4px solid ${p.main};}${s}p code{background:#F4F6F8;padding:0 4px;border-radius:3px;}`:""}
+${st.code==="dunkel"?`${s}pre.code{background:#1E2430;color:#E8EDF2;border-radius:6px;}${s}p code{background:#1E2430;color:#E8EDF2;padding:0 5px;border-radius:3px;}`:""}
+${st.code==="einfach"?`${s}pre.code{border:1px dashed ${p.line};}`:""}
+${st.verweis==="chip"?`${s}a.verweis{display:inline-block;background:${p.soft};color:${p.main};border:1px solid ${p.line};border-radius:999px;padding:0 10px;text-decoration:none;font-weight:bold;}`:""}
+${st.verweis==="link"?`${s}a.verweis{color:${p.main};text-decoration:underline;font-weight:bold;}`:""}
+${st.verweis==="hinweis"?`${s}a.verweis{color:#444;font-style:italic;text-decoration:none;}${s}a.verweis::before{content:"→ siehe ";}`:""}
+${s}h2 .ic{margin-right:.4em;}
+${s}table{border-collapse:collapse;width:100%;margin:6px 0 10px;font-size:.95em;}
+${s}th,${s}td{border:1px solid ${p.line};padding:4px 8px;text-align:left;vertical-align:top;}
+${s}th{background:${p.soft};color:${p.main};}
+${s}.luecke{display:inline-block;min-width:70px;border-bottom:1.5px solid #333;}
+${s}ul{margin:4px 0 8px;padding-left:20px;}`;
+}
+
+function typFarbe(st,k){return st.typen?((st.typFarben&&st.typFarben[k])||TYPEN[k].farbe):palette(st).main;}
+function typCss(st,s){
+  let out="";
+  for(const k in TYPEN){const c=darkenToContrast(typFarbe(st,k),4.5);out+=`${s}.blatt[data-typ="${k}"]{--typ:${c};--typ-hell:${mix(c,"#FFFFFF",.9)};}`;}
+  out+=`${s}.etikett{display:inline-block;background:#fff;color:var(--typ);font-size:7.5pt;font-weight:bold;letter-spacing:.08em;text-transform:uppercase;padding:2px 9px;border-radius:999px;margin-bottom:6px;}`;
+  if(st.kopf==="balken"){
+    out+=`${s}.titelbalken{background:var(--typ);color:#fff;padding:12px 16px 12px;border-radius:6px;margin:0 0 14px;border-bottom:4px solid ${"rgba(0,0,0,.18)"};}`+
+    `${s}.titelbalken h1{color:#fff!important;margin:0 0 3px!important;}`+
+    `${s}.titelbalken .meta{font-size:8pt;opacity:.92;display:block;}`+
+    `${s}.blatt>.kopf{display:none;}`;
+  }else{
+    out+=`${s}.titelbalken .etikett{background:var(--typ);color:#fff;}${s}.titelbalken .meta{display:none;}${s}.blatt>.kopf{border-bottom-color:var(--typ)!important;}${s}.titelbalken h1{color:var(--typ)!important;}`;
+  }
+  return out;
+}
+function esc(t){return String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");}
+function sheetHtml(st,typ){
+  typ=typ||st.vtyp||"ib";
+  const T=TYPEN[typ];
+  const titel={ls:"LS01 – Lena unterschreibt ihren Ausbildungsvertrag",ib:"IB01 – Der Ausbildungsvertrag",quiz:"Quiz – Der Ausbildungsvertrag",loesung:"LS01 – Lösung und Erwartungshorizont",hr:"Schritt für Schritt: Den Ausbildungsvertrag prüfen"}[typ];
+  const logo=st.logo?`<img src="${st.logo}" alt="Logo">`:"";
+  const links=[st.schule,st.fach].filter(Boolean).map(esc).join(" · ");
+  const kI=st.icons!=="wenige", hI=st.icons==="viele";
+  const kt=(k,t)=>`<span class="kt">${kI?ic(k):""}${t}</span>`;
+  const h2=t=>`<h2>${hI?ic("abschnitt"):""}${t}</h2>`;
+  const vw=t=>`<a class="verweis" href="WK_KB1_LS01_AB02_Probezeit.html">${kI&&st.verweis!=="hinweis"?ic("datei"):""}${t}</a>`;
+  const illu=`<svg class="illu" viewBox="0 0 340 150" role="img" aria-label="Vertrag mit zwei Unterschriften"><rect x="20" y="10" width="120" height="130" rx="6" fill="#fff" stroke="#555" stroke-width="2"/><path d="M38 34h84M38 50h84M38 66h60" stroke="#999" stroke-width="4" stroke-linecap="round"/><path d="M38 112c10-14 18 6 28-6s16 4 24-4" fill="none" stroke="${palette(st).main}" stroke-width="3" stroke-linecap="round"/><rect x="200" y="10" width="120" height="130" rx="6" fill="#fff" stroke="#555" stroke-width="2"/><path d="M218 34h84M218 50h84M218 66h60" stroke="#999" stroke-width="4" stroke-linecap="round"/><path d="M218 112c8-10 16 8 26-4s14 6 22-2" fill="none" stroke="${palette(st).main}" stroke-width="3" stroke-linecap="round"/><path d="M152 75h36" stroke="#555" stroke-width="3" stroke-linecap="round"/><path d="M178 66l10 9-10 9" fill="none" stroke="#555" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  const kopfMeta=`${[st.schule,st.fach].filter(Boolean).map(esc).join(" · ")} · LS01 · ${esc(T.name.split(" ·")[0])} &nbsp;|&nbsp; ${esc(st.klasse)} · ${esc(st.jahr)}`;
+  const vorspann={ls:`<div class="kasten aufgabe">${kt("aufgabe","Situation")}Lena hat ihren Ausbildungsvertrag bekommen und soll ihn bis Freitag unterschreiben. Sie bittet Sie, ihn vorher zu prüfen.</div>`,
+    quiz:`<div class="kasten tipp">${kt("tipp","So funktioniert es")}Beantworten Sie alle Fragen und klicken Sie auf „Auswerten“.</div>`,
+    loesung:`<div class="kasten achtung">${kt("achtung","Nur für Lehrkräfte")}Erwartungshorizont zu allen Aufgaben der Lernsituation.</div>`,
+    hr:`<div class="kasten merken">${kt("merken","Ziel")}Nach dieser Anleitung können Sie einen Ausbildungsvertrag Punkt für Punkt prüfen.</div>`,ib:""}[typ];
+  return `<div class="blatt" data-typ="${typ}">
+<div class="kopf"><span class="links">${logo}<span>${links} · LS01</span></span><span>${esc(st.klasse)} · ${esc(st.jahr)}</span></div>
+<div class="titelbalken">${st.kopf==="balken"&&logo?`<span style="float:right;background:#fff;border-radius:4px;padding:2px 4px">${logo}</span>`:""}<span class="etikett">${esc(T.name)}</span><h1>${esc(titel)}</h1><span class="meta">${kopfMeta}</span></div>
+${vorspann}
+<p>Lena beginnt ihre Ausbildung zur Tischlerin in der Holzwerk Seeberg GmbH. Bevor es losgeht, bekommt sie ihren Ausbildungsvertrag. Was muss darin stehen, und worauf sollte sie achten?</p>
+${h2("Pflichtangaben im Vertrag")}
+<table><tr><th>Angabe</th><th>Beispiel aus Lenas Vertrag</th></tr>
+<tr><td>Beginn und Dauer der Ausbildung</td><td>1. September, drei Jahre</td></tr>
+<tr><td>Dauer der Probezeit</td><td>vier Monate</td></tr>
+<tr><td>Höhe der Vergütung</td><td>je Ausbildungsjahr steigend</td></tr></table>
+<figure class="abb">${illu}<figcaption>${hI?ic("bild"):""}<b>Abbildung 1:</b> Beide Seiten unterschreiben den Vertrag.</figcaption></figure>
+<div class="kasten wichtig">${kt("wichtig","Wichtig")}Lesen Sie den Vertrag vor dem Unterschreiben vollständig. Unklare Punkte klären Sie vorher mit dem Betrieb.</div>
+<div class="kasten merken">${kt("merken","Merken")}Die Probezeit dauert mindestens einen und höchstens vier Monate (§ 20 BBiG).</div>
+<div class="kasten aufgabe">${kt("aufgabe","Aufgabe A1")}Prüfen Sie Lenas Vertrag: Fehlt eine Pflichtangabe? Begründen Sie mit dem Gesetz. Mehr zur Probezeit: ${vw("Arbeitsblatt 2 – Die Probezeit")}</div>
+${h2("Kurz gerechnet")}
+<p>Lenas Vergütung im ersten Jahr addieren Sie in Excel mit <code>=SUMME(B2:B13)</code>:</p>
+<pre class="code">B2:B13   monatliche Vergütung September bis August
+B14      =SUMME(B2:B13)</pre>
+${h2("Kurz geübt")}
+<p>Die Probezeit dauert mindestens <span class="luecke"></span> und höchstens <span class="luecke"></span> Monate.</p>
+<div class="kasten tipp">${kt("tipp","Tipp")}Die Pflichtangaben stehen in § 11 des Berufsbildungsgesetzes.</div>
+<div class="kasten achtung">${kt("achtung","Achtung")}Ist Lena noch nicht volljährig, müssen auch ihre Eltern unterschreiben.</div>
+<div class="fuss"><span>Arbeitsblatt 1 – Der Ausbildungsvertrag</span><span>${esc(st.jahr)}</span></div>
+</div>`;
+}
+
+/* ---------- Regeln für Claude ---------- */
+function rules(st){
+  const p=palette(st), F=FONTS[st.schrift];
+  const kastenText={kante:"heller Hintergrund mit farbiger Kante links",gefuellt:"heller Hintergrund, Titelzeile vollflächig in der Kastenfarbe mit weißer Schrift, runde Ecken",umrandet:"weißer Hintergrund mit 2 px Rahmen in der Kastenfarbe"}[st.kasten];
+  const ueberText={balken:"Abschnittsüberschriften (h2) als Farbbalken in der Hauptfarbe mit weißer Schrift",linie:"Abschnittsüberschriften (h2) in der Hauptfarbe, darunter eine 2 px Linie",schlicht:"Abschnittsüberschriften (h2) nur in der Hauptfarbe, ohne Linie"}[st.ueber];
+  return `# Skill: Layout (erstellt mit dem Layout-Baukasten)
+
+Gilt für **alle** Seiten in diesem Ordner. Grundlage ist immer \`3_Werkstatt/Vorlagen/Vorlage_Seite.html\` –
+deren Stil-Block unverändert übernehmen, nur den Inhalt austauschen.
+
+## Grundregel
+Jede Seite ist **eine einzige HTML-Datei**: Text, Stil und ggf. Programmlogik stehen in derselben Datei.
+Bilder als SVG oder eingebettet, keine Verweise auf fremde Dateien oder Webseiten.
+
+## Farben
+| Rolle | Farbe |
+|---|---|
+| Hauptfarbe (Titel, Überschriften, Linien) | ${p.main} |
+| Fließtext | ${p.text} |
+| Kasten „Merken“ | ${p.merken.c} (Hintergrund ${p.merken.tint}) |
+| Kasten „Wichtig“ | ${p.wichtig.c} (Hintergrund ${p.wichtig.tint}) |
+| Kasten „Aufgabe“ | ${p.aufgabe.c} (Hintergrund ${p.aufgabe.tint}) |
+| Kasten „Tipp“ | ${p.tipp.c} (Hintergrund ${p.tipp.tint}) |
+| Kasten „Achtung“ | ${p.achtung.c} (Hintergrund ${p.achtung.tint}) |
+
+## Schrift
+- ${F.name}: ${F.word} (Ersatz: ${F.stack}), Grundgröße ${st.groesse} pt, Zeilenabstand 1,5.
+- Titel (h1) ${(st.groesse*1.75).toFixed(1)} pt in der Hauptfarbe; ${ueberText}.
+
+## Kästen
+- Fünf Arten: Merken, Wichtig, Aufgabe, Tipp, Achtung – ${kastenText}.
+- Jeder Kasten beginnt mit seinem Titel: \`<div class="kasten merken"><span class="kt">Merken</span>…</div>\`
+  (Klassen: \`merken\`, \`wichtig\`, \`aufgabe\`, \`tipp\`, \`achtung\`).
+- „Wichtig“ nur für Inhalte, die man auf keinen Fall übersehen darf; höchstens ein Merken- und ein Wichtig-Kasten pro Abschnitt.
+
+## Icons: ${st.icons}
+${{wenige:"- Keine Icons. Kästen, Überschriften und Verweise nur mit Text.",
+mittel:"- Icons im Titel jedes Kastens und vor Verweisen auf andere Dateien. Überschriften ohne Icon.",
+viele:"- Icons im Titel jedes Kastens, vor Verweisen, vor jeder Abschnittsüberschrift (h2) und vor Bildunterschriften."}[st.icons]}
+${st.icons!=="wenige"?"- Icons immer als eingebettete SVG-Linienzeichnung (wie in der Vorlage), einfarbig in der Farbe des Elements. Keine Emojis.\n- Feste Bedeutung: Lesezeichen = Merken · Ausrufezeichen im Kreis = Wichtig · Stift = Aufgabe · Glühbirne = Tipp · Warndreieck = Achtung · Blatt = Verweis":"- Keine Emojis."}
+
+## Bilder und Grafiken
+- Als \`<figure class="abb">\` mit Bildunterschrift \`<figcaption><b>Abbildung X:</b> …</figcaption>\`, fortlaufend nummeriert.
+- Darstellung: ${{rahmen:"mit dünnem Rahmen",schlicht:"ohne Rahmen",karte:"auf hellem Hintergrund in der Hauptfarbe mit runden Ecken (Karte)"}[st.bild]}.
+- Grafiken möglichst als SVG direkt in die Seite einbauen; Fotos nur eingebettet (keine Links auf fremde Webseiten).
+
+## Code, Formeln und Befehle
+- Kurze Stellen im Satz mit \`<code>…</code>\`, längere Abschnitte mit \`<pre class="code">…</pre>\`.
+- Darstellung: ${{hell:"hellgrauer Hintergrund mit Kante in der Hauptfarbe",dunkel:"dunkler Hintergrund mit heller Schrift",einfach:"nur Festbreitenschrift mit gestricheltem Rahmen"}[st.code]}.
+
+## Verweise auf andere Dateien
+- Immer als relativer Link auf die andere HTML-Datei im selben Ordner: \`<a class="verweis" href="WK_KB1_LS01_AB02_Probezeit.html">Arbeitsblatt 2 – Die Probezeit</a>\`.
+- Darstellung: ${{chip:"als Knopf (abgerundet, heller Hintergrund)",link:"unterstrichen in der Hauptfarbe",hinweis:"kursiv mit vorangestelltem „→ siehe“"}[st.verweis]}.
+- Linktext ist immer der Titel der Zieldatei, nie „hier klicken“.
+
+## Blattarten und Kopfbereich
+${st.kopf==="balken"
+?"- Oben auf jedem Blatt ein **Farbbalken** über die ganze Breite: darin ein weißes Etikett mit der Blattart (Großbuchstaben), darunter der Titel in Weiß und eine kleine Zeile mit Fach · Lernsituation · Blattart | Klasse · Schuljahr. Keine zusätzliche Kopfzeile."
+:"- Oben eine schlichte Kopfzeile mit Linie; darunter ein kleines farbiges Etikett mit der Blattart und der Titel."}
+${st.typen?"- Die **Farbe des Kopfbereichs zeigt die Blattart** – immer dieselbe Farbe für dieselbe Art:":"- Alle Blattarten nutzen die Hauptfarbe; nur das Etikett nennt die Blattart:"}
+
+| Blattart | Etikett | Farbe | Dateiname enthält |
+|---|---|---|---|
+${Object.keys(TYPEN).map(k=>`| ${TYPEN[k].name.split(" ·")[0]} | ${TYPEN[k].name.toUpperCase()} | ${darkenToContrast(typFarbe(st,k),4.5)} | \`${TYPEN[k].kurz}\` |`).join("\n")}
+
+- Umsetzung in der Vorlage: \`<div class="blatt" data-typ="ib">\` – Werte: \`ls\`, \`ib\`, \`quiz\`, \`loesung\`, \`hr\`. Alle Farben stehen schon im Stil-Block der Vorlage.
+- Lösungen tragen zusätzlich oben einen Achtung-Kasten „Nur für Lehrkräfte“.
+
+## Kopf- und Fußzeile
+- Kopfzeile links: ${[st.schule,st.fach].filter(Boolean).join(" · ") || "Fach"} · Lernsituation${st.logo?" (mit Logo)":""}; rechts: ${st.klasse} · ${st.jahr}.
+- Fußzeile links: Titel der Seite; rechts: ${st.jahr}.
+
+## Tabellen und Lücken
+- Tabellen mit Kopfzeile in Hauptfarbe auf hellem Grund, dünne Linien.
+- Lücken im Lückentext: \`<span class="luecke"></span>\`.
+
+## Druck
+- DIN A4, Ränder 15 mm oben/unten, 16 mm links/rechts. Muss auch als Schwarzweiß-Kopie gut lesbar sein.
+`;
+}
+
+function templateFile(st){
+  return `<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vorlage – Seite</title>
+<!-- Erstellt mit dem Layout-Baukasten. Alles steht in dieser einen Datei: Stil hier oben, Inhalt unten.
+     Für neue Seiten: diesen Stil-Block unverändert übernehmen, nur den Inhalt austauschen.
+     Blattart oben im Element <div class="blatt" data-typ="…">: ls | ib | quiz | loesung | hr -->
+<style>
+@page{size:A4;margin:0;}
+${sheetCss(st,"")}
+body{max-width:210mm;margin:0 auto;}
+</style>
+</head>
+<body>
+${sheetHtml(st)}
+</body>
+</html>`;
+}
+
+/* ---------- Zustand ---------- */
+const KEY="layout-baukasten-v2";
+function fromPreset(pr,keep){return Object.assign({preset:pr.id,farbe:pr.farbe,schrift:pr.schrift,ueber:pr.ueber,kasten:pr.kasten,bunt:pr.bunt,groesse:pr.groesse,bild:pr.bild,code:pr.code,verweis:pr.verweis,icons:pr.icons,kopf:pr.kopf||"linie",typen:!!pr.typen,typFarben:(keep&&keep.typFarben)||typDefaults(),vtyp:(keep&&keep.vtyp)||"ib"},
+  keep?{fach:keep.fach,klasse:keep.klasse,jahr:keep.jahr,schule:keep.schule,logo:keep.logo}:Object.assign({logo:""},DEFAULT_TEXT));}
+let state=fromPreset(PRESETS.find(x=>x.id==="blau"));
+try{const raw=localStorage.getItem(KEY);if(raw){const s=JSON.parse(raw);if(s&&s.farbe)state=Object.assign({},state,NEW_DEFAULTS,s);}}catch(e){}
+const history=[];
+function save(){try{localStorage.setItem(KEY,JSON.stringify(state));}catch(e){}}
+function change(patch){history.push(JSON.stringify(state));if(history.length>60)history.shift();state=Object.assign({},state,patch);render();}
+
+/* ---------- Oberfläche aufbauen ---------- */
+const $=id=>document.getElementById(id);
+function presetCards(){
+  $("presetCards").innerHTML=PRESETS.map(pr=>{const p=palette(Object.assign({},state,pr));
+    const t=pr.ueber==="balken"?`background:${p.main}`:`background:${p.main}`;
+    const k=pr.kasten==="umrandet"?`border:2px solid ${p.merken.c};background:#fff`:pr.kasten==="gefuellt"?`background:${p.merken.tint};border-top:6px solid ${p.merken.c}`:`background:${p.merken.tint};border-left:4px solid ${p.merken.c}`;
+    return `<button type="button" class="card" data-preset="${pr.id}" aria-pressed="${state.preset===pr.id}">
+      <span class="mini" aria-hidden="true"><span class="t" style="${t}"></span><span class="l" style="width:92%"></span><span class="l" style="width:80%"></span><span class="k" style="${k}"></span></span>
+      <b>${pr.name}</b><small>${pr.desc}</small></button>`;}).join("");
+}
+function opts(){
+  $("swatches").innerHTML=SWATCHES.map(c=>`<button type="button" class="swatch" style="background:${c}" data-farbe="${c}" aria-label="Farbe ${c}" aria-pressed="${state.farbe.toUpperCase()===c}"></button>`).join("")+
+    `<label class="own">eigene<input type="color" id="ownColor" value="${state.farbe}" aria-label="Eigene Farbe wählen"></label>`;
+  $("fontOpts").innerHTML=Object.entries(FONTS).map(([k,f])=>`<button type="button" class="opt" data-schrift="${k}" aria-pressed="${state.schrift===k}"><span class="aa" style="font-family:${f.stack}">Aa</span>${f.name}<small style="color:var(--muted)">${f.word}</small></button>`).join("");
+  const m=state.farbe;
+  const hp={balken:`<span style="background:${m};height:12px;border-radius:2px"></span>`,linie:`<span style="height:8px;width:60%;background:${m};border-radius:2px"></span><span style="height:2px;background:${m}"></span>`,schlicht:`<span style="height:8px;width:60%;background:${m};border-radius:2px"></span>`};
+  $("headOpts").innerHTML=Object.entries(HEADS).map(([k,n])=>`<button type="button" class="opt" data-ueber="${k}" aria-pressed="${state.ueber===k}"><span class="pic">${hp[k]}</span>${n}</button>`).join("");
+  const t=mix(m,"#FFFFFF",.88);
+  const bp={kante:`background:${t};border-left:4px solid ${m}`,gefuellt:`background:${t};border-top:7px solid ${m};border-radius:4px`,umrandet:`background:#fff;border:2px solid ${m};border-radius:3px`};
+  $("boxOpts").innerHTML=Object.entries(BOXES).map(([k,n])=>`<button type="button" class="opt" data-kasten="${k}" aria-pressed="${state.kasten===k}"><span class="pic"><span style="height:26px;${bp[k]}"></span></span>${n}</button>`).join("");
+  const icPic=n=>`<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="${m}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${ICON[n]}</svg>`;
+  const ip={wenige:`<span style="display:flex;gap:4px;align-items:center"><span style="height:6px;width:70%;background:${m};border-radius:2px"></span></span>`,
+    mittel:`<span style="display:flex;gap:4px;align-items:center">${icPic("merken")}<span style="height:6px;width:60%;background:${m};border-radius:2px"></span></span>`,
+    viele:`<span style="display:flex;gap:3px;align-items:center">${icPic("abschnitt")}${icPic("tipp")}${icPic("datei")}</span>`};
+  $("iconOpts").innerHTML=Object.entries(ICONMENGE).map(([k,n])=>`<button type="button" class="opt" data-icons="${k}" aria-pressed="${state.icons===k}"><span class="pic">${ip[k]}</span>${n}</button>`).join("");
+  const bp2={rahmen:`border:1.5px solid #9aa4ae;background:#fff`,schlicht:`background:#fff`,karte:`background:${t};border-radius:6px`};
+  $("bildOpts").innerHTML=Object.entries(BILDER).map(([k,n])=>`<button type="button" class="opt" data-bild="${k}" aria-pressed="${state.bild===k}"><span class="pic" style="align-items:center"><span style="display:flex;align-items:center;justify-content:center;width:44px;height:28px;${bp2[k]}">${icPic("bild")}</span></span>${n}</button>`).join("");
+  const cp={hell:`background:#F4F6F8;border-left:3px solid ${m};color:#333`,dunkel:`background:#1E2430;color:#E8EDF2;border-radius:3px`,einfach:`border:1px dashed #9aa4ae;color:#333`};
+  $("codeOpts").innerHTML=Object.entries(CODES).map(([k,n])=>`<button type="button" class="opt" data-code="${k}" aria-pressed="${state.code===k}"><span class="pic"><span style="font-family:Consolas,monospace;font-size:11px;padding:3px 5px;${cp[k]}">=SUMME()</span></span>${n}</button>`).join("");
+  const vp={chip:`<span style="font-size:11px;font-weight:700;color:${m};background:${t};border-radius:999px;padding:1px 8px;border:1px solid ${mix(m,"#FFFFFF",.55)}">Blatt 2</span>`,link:`<span style="font-size:11px;font-weight:700;color:${m};text-decoration:underline">Blatt 2</span>`,hinweis:`<span style="font-size:11px;font-style:italic;color:#444">→ siehe Blatt 2</span>`};
+  $("verweisOpts").innerHTML=Object.entries(VERWEISE).map(([k,n])=>`<button type="button" class="opt" data-verweis="${k}" aria-pressed="${state.verweis===k}"><span class="pic" style="align-items:flex-start">${vp[k]}</span>${n}</button>`).join("");
+  $("kopfOpts").innerHTML=Object.entries(KOEPFE).map(([k,n])=>`<button type="button" class="opt" data-kopf="${k}" aria-pressed="${state.kopf===k}"><span class="pic">${k==="balken"?`<span style="background:${m};height:22px;border-radius:3px;display:flex;align-items:center;padding:0 5px"><span style="background:#fff;height:6px;width:26px;border-radius:3px"></span></span>`:`<span style="height:2px;background:${m}"></span><span style="height:8px;width:55%;background:${m};border-radius:2px"></span>`}</span>${n}</button>`).join("");
+  $("typToggle").checked=!!state.typen;
+  $("typRows").innerHTML=Object.entries(TYPEN).map(([k,t])=>`<div class="typrow"><input type="color" data-typfarbe="${k}" value="${typFarbe(state,k)}" ${state.typen?"":"disabled"} aria-label="Farbe für ${t.name}"><span><span class="tn">${t.name}</span><br><span class="tk">Dateiname: …_${t.kurz}…</span></span><button type="button" class="btn" data-vtyp="${k}" style="padding:4px 9px;font-size:.8rem">ansehen</button></div>`).join("");
+  $("typTabs").innerHTML='<span class="note" style="margin:0 4px 0 0;align-self:center">Vorschau als:</span>'+Object.entries(TYPEN).map(([k,t])=>`<button type="button" data-vtyp="${k}" aria-pressed="${state.vtyp===k}"><i style="background:${typFarbe(state,k)}"></i>${t.name.split(" ·")[0]}</button>`).join("");
+  for(const [id,key] of [["f_fach","fach"],["f_klasse","klasse"],["f_jahr","jahr"],["f_schule","schule"]]){if(document.activeElement!==$(id))$(id).value=state[key]||"";}
+  $("logoRemove").hidden=!state.logo; $("logoInfo").textContent=state.logo?"Logo eingefügt":"optional, PNG, JPG oder SVG";
+}
+let paperStyle=document.createElement("style");document.head.appendChild(paperStyle);
+function preview(){
+  paperStyle.textContent=sheetCss(state,"#paper");
+  $("paper").innerHTML=sheetHtml(state);
+  fit();
+}
+function fit(){
+  const desk=$("desk"),paper=$("paper"),box=$("paperbox");
+  const avail=desk.clientWidth-40; const sc=Math.min(1,avail/794);
+  paper.style.transform=`scale(${sc})`; box.style.width=(794*sc)+"px"; box.style.height=(paper.offsetHeight*sc)+"px";
+}
+function ampel(){
+  const p=palette(state); const cr=contrast(state.farbe,"#FFFFFF");
+  const el=$("ampel"),dot=el.querySelector(".dot"),txt=el.querySelector(".txt");
+  let col,msg;
+  if(cr>=7){col="var(--good)";msg="Lesbarkeit: sehr gut";}
+  else if(cr>=4.5){col="var(--good)";msg="Lesbarkeit: gut";}
+  else if(cr>=3){col="var(--warn)";msg="Lesbarkeit: knapp – die Hauptfarbe ist für Schrift etwas hell";}
+  else {col="var(--bad)";msg="Lesbarkeit: zu schwach – Überschriften sind schlecht zu lesen";}
+  dot.style.background=col; txt.textContent=msg; $("fixContrast").hidden=cr>=4.5;
+}
+function render(){presetCards();opts();preview();ampel();$("rulesOut").value=rules(state);$("undo").disabled=!history.length;save();}
+
+/* ---------- Ereignisse ---------- */
+let step=1;
+function go(n){step=n;for(let i=1;i<=3;i++)$("step"+i).hidden=i!==n;
+  document.querySelectorAll(".steps button").forEach(b=>b.setAttribute("aria-current",b.dataset.go==n?"step":"false"));
+  if(window.innerWidth<860)$("step"+n).scrollIntoView({block:"start",behavior:"smooth"});}
+document.addEventListener("click",e=>{
+  if(e.target.closest("#paper a")){e.preventDefault();toast("Im echten Blatt öffnet dieser Verweis das andere Arbeitsblatt");return;}
+  const g=e.target.closest("[data-go]");if(g){go(+g.dataset.go);return;}
+  const pr=e.target.closest("[data-preset]");if(pr){change(fromPreset(PRESETS.find(x=>x.id===pr.dataset.preset),state));return;}
+  const sw=e.target.closest("[data-farbe]");if(sw){change({farbe:sw.dataset.farbe,preset:""});return;}
+  const sf=e.target.closest("[data-schrift]");if(sf){change({schrift:sf.dataset.schrift,preset:""});return;}
+  const su=e.target.closest("[data-ueber]");if(su){change({ueber:su.dataset.ueber,preset:""});return;}
+  const sk=e.target.closest("[data-kasten]");if(sk){change({kasten:sk.dataset.kasten,preset:""});return;}
+  const vt=e.target.closest("[data-vtyp]");if(vt){state=Object.assign({},state,{vtyp:vt.dataset.vtyp});render();return;}
+  const kp=e.target.closest("[data-kopf]");if(kp){change({kopf:kp.dataset.kopf,preset:""});return;}
+  for(const k of ["icons","bild","code","verweis"]){const el=e.target.closest(`[data-${k}]`);if(el){change({[k]:el.dataset[k],preset:""});return;}}
+});
+document.addEventListener("input",e=>{
+  if(e.target.id==="ownColor"){state=Object.assign({},state,{farbe:e.target.value.toUpperCase(),preset:""});preview();ampel();$("rulesOut").value=rules(state);save();}
+  const map={f_fach:"fach",f_klasse:"klasse",f_jahr:"jahr",f_schule:"schule"};
+  if(map[e.target.id]){state=Object.assign({},state,{[map[e.target.id]]:e.target.value});preview();$("rulesOut").value=rules(state);save();}
+});
+document.addEventListener("change",e=>{if(e.target.id==="ownColor"){history.push(JSON.stringify(state));render();}
+  if(e.target.id==="typToggle"){change({typen:e.target.checked,preset:""});}
+  if(e.target.dataset&&e.target.dataset.typfarbe){const tf=Object.assign({},state.typFarben||typDefaults(),{[e.target.dataset.typfarbe]:e.target.value.toUpperCase()});change({typFarben:tf,preset:""});}});
+$("fixContrast").onclick=()=>{change({farbe:darkenToContrast(state.farbe,4.5)});toast("Farbe etwas dunkler gestellt – jetzt gut lesbar");};
+$("undo").onclick=()=>{if(!history.length)return;state=JSON.parse(history.pop());render();};
+$("reset").onclick=()=>{change(fromPreset(PRESETS.find(x=>x.id==="blau")));toast("Zurückgesetzt");};
+$("swToggle").onchange=e=>$("paper").classList.toggle("sw",e.target.checked);
+$("f_logo").onchange=e=>{const f=e.target.files[0];if(!f)return;if(f.size>400000){toast("Das Logo ist zu groß (höchstens 400 KB)");return;}
+  const r=new FileReader();r.onload=()=>change({logo:r.result});r.readAsDataURL(f);e.target.value="";};
+$("logoRemove").onclick=()=>change({logo:""});
+
+function toast(t){const el=$("toast");el.textContent=t;el.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>el.hidden=true,2600);}
+function download(name,text,type){try{const b=new Blob([text],{type});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);toast("„"+name+"“ wird gespeichert");}catch(e){toast("Herunterladen ist hier gesperrt – Datei direkt im Browser öffnen");}}
+$("copyRules").onclick=async()=>{const t=rules(state);try{await navigator.clipboard.writeText(t);toast("Regeln kopiert – jetzt in „Layout.md“ einfügen");}catch(e){const ta=$("rulesOut");ta.focus();ta.select();toast("Text ist markiert – mit Strg+C kopieren");}};
+$("dlTemplate").onclick=()=>download("Vorlage_Seite.html",templateFile(state),"text/html");
+$("dlSettings").onclick=()=>download("Layout-Einstellungen.json",JSON.stringify(state,null,2),"application/json");
+$("ulSettings").onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.farbe)throw 0;change(s);toast("Einstellungen geladen");}catch(err){toast("Diese Datei enthält keine Layout-Einstellungen");}};r.readAsText(f);e.target.value="";};
+window.addEventListener("resize",fit);
+if(window.ResizeObserver)new ResizeObserver(fit).observe($("desk"));
+window.LayoutBaukasten={rules:()=>rules(state),template:()=>templateFile(state),state:()=>state};
+render();
+})();
+</script>
+</body>
+</html>
