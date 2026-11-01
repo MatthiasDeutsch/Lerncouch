@@ -2,6 +2,19 @@
 
 Hier liegen die PDFs zu den Lernvideos auf dem YouTube-Kanal [Deine Lerncouch](https://www.youtube.com/@mrgerman3999).
 
+## Netzwerktechnik mit Filius (Lernfeld 3)
+
+Filius gibt es kostenlos unter [lernsoftware-filius.de](https://www.lernsoftware-filius.de). Laden Sie die Startdatei herunter, öffnen Sie sie in Filius und machen Sie im Video mit.
+
+| Video | Material |
+|---|---|
+| Filius: Erstes Netzwerk bauen – Peer-to-Peer und Switch | [Startdatei](LF03/LS02/LF03_LS02_Buero_2OG_Start.fls) · [Schritt-für-Schritt-Anleitung](LF03/LS02/LF03_LS02_Anleitung_Filius_Grundlagen.pdf) |
+| Filius: Wie lernt ein Switch? SAT-Tabelle und ARP beobachten | [Startdatei](LF03/LS03/LF03_LS03_Switch_beobachten.fls) · [Schritt-für-Schritt-Anleitung](LF03/LS03/LF03_LS03_Anleitung_Filius_Switch_beobachten.pdf) |
+| Filius: Fehler im IP-Adressschema finden | [Startdatei](LF03/LS05/LF03_LS05_BrainChain_Netze_Start.fls) · [Schritt-für-Schritt-Anleitung](LF03/LS05/LF03_LS05_Anleitung_Filius_Fehlersuche.pdf) |
+| Filius: Kapselung live ansehen: ARP, DNS, TCP und HTTP | [Startdatei](LF03/LS07/LF03_LS07_Kapselung_beobachten.fls) · [Schritt-für-Schritt-Anleitung](LF03/LS07/LF03_LS07_Anleitung_Filius_Kapselung.pdf) |
+| Filius: So verteilt ein DHCP-Server die Adressen | [Startdatei](LF03/LS08/LF03_LS08_Clients_integrieren_Start.fls) · [Schritt-für-Schritt-Anleitung](LF03/LS08/LF03_LS08_Anleitung_Filius_DHCP.pdf) |
+| Filius: Router und Firewall einrichten – Gateway und Paketfilter | [Startdatei](LF03/LS11/LF03_LS11_ScooterShare_Start.fls) · [Schritt-für-Schritt-Anleitung](LF03/LS11/LF03_LS11_Anleitung_Filius_Router_Firewall.pdf) |
+
 ## Linux-Server administrieren
 
 | Video | Material |
