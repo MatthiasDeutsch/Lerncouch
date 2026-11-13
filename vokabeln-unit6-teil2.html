@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#1f2a44">
+<title>Vokabeltrainer Unit 6</title>
+<style>
+:root{--bg:#f6f3ec;--karte:#fff;--text:#1f2a44;--leise:#5d6680;--linie:#e3ded2;--akzent:#1f9e8f;--akzent2:#e2544a;--gut:#1f9e5a;--gutbg:#e3f5ea;--schlecht:#c8322b;--schlechtbg:#fbe5e3;--gelb:#ffc93c;--schatten:0 6px 0 rgba(31,42,68,.08)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#141a2a;--karte:#1f2740;--text:#eef1f8;--leise:#a7b0c8;--linie:#334063;--akzent:#3cc7b4;--akzent2:#ff7a6e;--gut:#55d68e;--gutbg:#173a2a;--schlecht:#ff7a6e;--schlechtbg:#422125;--schatten:0 6px 0 rgba(0,0,0,.25)}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--text);font:16px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:560px;margin:0 auto;padding:16px 16px calc(28px + env(safe-area-inset-bottom))}
+h1{font-size:24px;line-height:1.15;margin:6px 0 2px}
+.unter{color:var(--leise);font-size:14px;margin:0 0 16px}
+.box{background:var(--karte);border:1px solid var(--linie);border-radius:18px;padding:16px;margin:0 0 14px;box-shadow:var(--schatten)}
+.box h2{font-size:15px;margin:0 0 10px;text-transform:uppercase;letter-spacing:.04em;color:var(--leise)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--linie);background:transparent;color:var(--text);border-radius:999px;padding:9px 14px;font:600 15px system-ui,sans-serif;min-height:44px;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--text);border-color:var(--text);color:var(--bg)}
+.modi{display:grid;gap:10px}
+.modus{display:flex;gap:14px;align-items:center;text-align:left;width:100%;border:2px solid var(--linie);background:var(--karte);color:var(--text);border-radius:16px;padding:14px;cursor:pointer;font:inherit;min-height:64px}
+.modus b{display:block;font-size:17px}.modus small{color:var(--leise)}
+.modus i{flex:none;width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-style:normal;font-size:22px;color:#fff}
+.modus:active{transform:scale(.99)}
+.stand{display:flex;justify-content:space-between;font-size:14px;color:var(--leise);margin-top:10px}
+.balken{height:10px;background:var(--linie);border-radius:6px;overflow:hidden;margin-top:6px}.balken span{display:block;height:100%;background:var(--gut);border-radius:6px;transition:width .3s}
+.kopf{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.zurueck{border:0;background:var(--karte);color:var(--text);border-radius:12px;min-width:44px;height:44px;font-size:20px;cursor:pointer;box-shadow:var(--schatten)}
+.kopf .info{flex:1;font-size:14px;color:var(--leise)}
+.frage{background:var(--karte);border-radius:22px;padding:22px 18px;box-shadow:var(--schatten);border:1px solid var(--linie);min-height:150px;display:flex;flex-direction:column;justify-content:center;text-align:center}
+.frage .art{font-size:13px;color:var(--leise);text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.frage .wort{font-size:26px;font-weight:700;line-height:1.2;overflow-wrap:anywhere}
+.frage .hinweis{color:var(--leise);margin-top:8px;font-size:15px}
+.antworten{display:grid;gap:10px;margin-top:14px}
+.antw{border:2px solid var(--linie);background:var(--karte);color:var(--text);border-radius:14px;padding:14px;font:600 16px system-ui,sans-serif;text-align:left;min-height:54px;cursor:pointer}
+.antw.richtig{border-color:var(--gut);background:var(--gutbg)}.antw.falsch{border-color:var(--schlecht);background:var(--schlechtbg)}
+input.tipp{width:100%;font:600 19px system-ui,sans-serif;padding:14px;border-radius:14px;border:2px solid var(--linie);background:var(--karte);color:var(--text);margin-top:14px}
+input.tipp:focus{outline:3px solid var(--akzent);outline-offset:1px}
+.knopf{width:100%;border:0;border-radius:14px;padding:15px;font:700 17px system-ui,sans-serif;background:var(--akzent);color:#fff;margin-top:12px;min-height:54px;cursor:pointer}
+.knopf.zweit{background:transparent;color:var(--text);border:2px solid var(--linie)}
+.zwei{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.zwei .knopf.nein{background:var(--akzent2)}.zwei .knopf.ja{background:var(--gut)}
+.rueck{border-radius:14px;padding:12px 14px;margin-top:12px;font-weight:600}
+.rueck.gut{background:var(--gutbg);color:var(--gut)}.rueck.schlecht{background:var(--schlechtbg);color:var(--schlecht)}
+.rueck .loesung{display:block;color:var(--text);font-weight:700;font-size:18px;margin-top:2px}
+.flip{perspective:1200px;margin-top:4px;cursor:pointer}
+.flip .innen{position:relative;min-height:230px;transition:transform .45s;transform-style:preserve-3d}
+.flip.um .innen{transform:rotateY(180deg)}
+.seite{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--karte);border:1px solid var(--linie);border-radius:22px;box-shadow:var(--schatten);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:20px}
+.seite.hinten{transform:rotateY(180deg)}
+.seite .wort{font-size:26px;font-weight:700;overflow-wrap:anywhere}.seite .hinweis{color:var(--leise);margin-top:10px}
+.tipphilfe{text-align:center;color:var(--leise);font-size:13px;margin-top:8px}
+.ende{text-align:center}.ende .gross{font-size:52px;font-weight:800;margin:6px 0}
+.liste{margin:12px 0 0;padding:0;list-style:none;text-align:left}
+.liste li{padding:10px 0;border-bottom:1px solid var(--linie)}.liste li b{display:block}
+.fuss{color:var(--leise);font-size:12.5px;text-align:center;margin-top:18px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+  <section id="start">
+    <h1>Vocabulary Unit 6 – Connected worlds</h1>
+    <p class="unter">Part two · 2BKI2 · Übe für den Test</p>
+    <div class="box">
+      <h2>Welche Seiten?</h2>
+      <div class="chips" id="seiten"></div>
+      <div class="stand"><span id="anzahl"></span><span id="gelerntTxt"></span></div>
+      <div class="balken"><span id="balken"></span></div>
+    </div>
+    <div class="box">
+      <h2>Richtung</h2>
+      <div class="chips" id="richtung">
+        <button class="chip" data-r="de" aria-pressed="true">Deutsch → Englisch</button>
+        <button class="chip" data-r="en" aria-pressed="false">Englisch → Deutsch</button>
+        <button class="chip" data-r="def" aria-pressed="false">Erklärung → Wort</button>
+      </div>
+    </div>
+    <div class="modi">
+      <button class="modus" data-m="karten"><i style="background:#2357b8">🃏</i><span><b>Karteikarten</b><small>Umdrehen und selbst einschätzen</small></span></button>
+      <button class="modus" data-m="quiz"><i style="background:#1f9e8f">✓</i><span><b>Quiz</b><small>Aus vier Antworten die richtige wählen</small></span></button>
+      <button class="modus" data-m="tippen"><i style="background:#e2544a">✎</i><span><b>Schreiben</b><small>Wie im Test: das Wort selbst eintippen</small></span></button>
+      <button class="modus" data-m="fehler" id="fehlerKnopf"><i style="background:#d27a12">↺</i><span><b>Meine Fehler üben</b><small id="fehlerTxt"></small></span></button>
+    </div>
+    <p class="fuss">Dein Fortschritt bleibt auf diesem Gerät gespeichert. <button class="chip" id="reset" style="min-height:32px;padding:4px 10px;font-size:12px">Zurücksetzen</button></p>
+  </section>
+
+  <section id="ueben" hidden>
+    <div class="kopf"><button class="zurueck" id="zurueck" aria-label="Zurück">←</button><div class="info" id="pos"></div><div class="info" id="punkte" style="text-align:right"></div></div>
+    <div class="balken" style="margin:-4px 0 14px"><span id="fortschritt"></span></div>
+    <div id="buehne"></div>
+  </section>
+
+  <section id="fertig" hidden>
+    <div class="box ende">
+      <div id="endeTitel" style="font-weight:700;font-size:18px"></div>
+      <div class="gross" id="endeZahl"></div>
+      <div id="endeTxt" class="unter"></div>
+      <button class="knopf" id="nochmal">Fehler gleich nochmal üben</button>
+      <button class="knopf zweit" id="zumStart">Zur Übersicht</button>
+      <ul class="liste" id="endeListe"></ul>
+    </div>
+  </section>
+</main>
+<script>
+const DATEN = [[70,"to suggest sth","e.g. Survey results suggest an improvement in public health.","etw andeuten, auf etw hindeuten, etw nahelegen"],[70,"minority","<> majority","Minderheit"],[70,"decline","decrease, fall","Niedergang"],[70,"to drop","to fall, to decrease","zurückgehen, sinken"],[70,"invention","v to invent","Erfindung"],[70,"growth","development, increase","Wachstum, Anstieg, Zunahme"],[70,"to commute","to travel (usually to work)","(zur Arbeit usw.) fahren, pendeln"],[70,"random","with no clear line or idea","beliebig, zufällig, willkürlich"],[70,"bias","the ideas and opinions we already have","Neigung, (politische) Einstellung"],[70,"conscience","a feeling that you're doing sth bad","Gewissen"],[70,"subscription","paying an amount regularly to receive access to sth","Abonnement"],[70,"to customize sth to sb/sth","to make sth according to sb's taste","etw auf jdn/etw zuschneiden"],[71,"to reinforce sth","to give support to sth","etw verstärken, etw untermauern"],[71,"to be designed to do sth","to be made for a special reason or purpose","dazu/dafür gedacht sein, etw zu tun"],[71,"to be made up of sth","to consist of sth","aus etw bestehen"],[71,"rarely","<> often","selten, kaum"],[71,"to engage with sb/sth","to deal with sth/sb","sich mit jdm/etw auseinandersetzen"],[71,"accurate","exact, true","richtig, präzise, korrekt"],[71,"trustworthy","able to be trusted","zuverlässig, glaubwürdig"],[71,"to detect sth","to identify sth, to spot sth","etw erkennen, etw wahrnehmen"],[71,"to verify sth","to check if sth is correct or accurate","etw (über)prüfen"],[71,"to vote","to choose an option e.g. a political candidate","abstimmen, wählen"],[71,"persuasive","convincing; v to persuade","überzeugend"],[71,"evidence","proof","Indizien, Hinweise"],[71,"outcome","result","Ergebnis, Resultat"],[71,"election","the process of choosing a person or a group of people by voting","Wahl"],[71,"unfamiliar","unknown","unbekannt"],[72,"prejudiced","with a (negative) view of sb/sth","voreingenommen, vorurteilsbehaftet"],[72,"conclusion","e.g. At the end, we were able to reach a conclusion.","Schluss, Beschluss, Fazit"],[72,"usage","v to use","Nutzung"],[73,"relief","pleasant feeling after completing/finishing sth","Entlastung, Entspannung"],[73,"pride (in sth)","adj proud","Stolz (auf etw)"],[73,"curiosity","adj curious","Neugier"],[73,"remarkable","surprising or unusual","bemerkenswert, außergewöhnlich"],[73,"controversy","disagreement between large groups of people","Auseinandersetzung(en), Kontroverse"],[74,"sensible(-ly)","<> silly","vernünftig"],[74,"virtue signalling","seeking attention online by posting about how good you are","demonstrative Zurschaustellung der eigenen Tugend"],[74,"hostile","very unfriendly","feindselig"],[74,"to be ashamed of sth","to have feelings of shame or guilt about sth","sich für etw schämen"],[74,"imperfection","state of not being perfect","Unzulänglichkeit, Fehler"],[74,"fashion sense","knowing what clothes look good together","Modebewusstsein, Geschmack"],[74,"to oversleep","to sleep through an alarm","verschlafen"],[75,"to reframe sth","to explain sth in a different way","etw umformulieren, etw neu fassen"],[75,"performance","acting, singing, dancing in front of an audience","Darbietung, Aufführung"],[75,"to monitor sb/sth","to watch sb/sth","jdn/etw überwachen"],[75,"reward","sth given because you have done sth good","Belohnung"],[75,"urge","need","Drang"],[75,"justification","v to justify","Rechtfertigung, Begründung"],[75,"inconvenient","<> convenient","lästig, unangenehm, unvorteilhaft"],[76,"envious","badly wishing you had sth sb else has","neidisch"],[76,"supporter","e.g. I'm an Eintracht Frankfurt supporter.","Fan"],[76,"voter","sb who votes at an election","Wähler/in"],[76,"victim","sb who has suffered a crime","Opfer"],[76,"common","popular, normal or usual","verbreitet, häufig, üblich"],[76,"powerless","without the ability or possibility to do anything","machtlos"],[76,"right-wing","<> left-wing","(politisch) rechts"],[76,"bright","intelligent, talented","aufgeweckt, intelligent"],[76,"to marginalize sb","to put sb in a position in which they have no power","jdn ausgrenzen"],[76,"riot","violence and disturbance by a crowd","Aufstand, Aufruhr, Unruhe"],[76,"suicide","the act of killing yourself","Selbstmord"],[76,"to upset sb","to make someone sad or angry","jdn aus der Fassung bringen"],[76,"gradually","slowly, bit by bit","allmählich"],[76,"untrue","false","unzutreffend, unwahr"],[76,"to threaten (sb)","n threat","(jdm) drohen, jdn bedrohen"],[76,"to single out sb","to treat sb differently to others","jdn herausgreifen, jdn auswählen"],[76,"to attack","e.g. The wolves attacked the bear.","angreifen"],[76,"to police sth","to control sth","etw überwachen, etw kontrollieren"],[76,"food chain","a series of living creatures in which each type of creature feeds on the one below it in the series","Nahrungskette"],[76,"to hold on to sth","to keep sth","an etw festhalten"],[76,"to target sb/sth","to focus on sb/sth","jdn/etw ins Visier nehmen"],[76,"impression","e.g. She made a good impression.","Eindruck"],[78,"effort","attempt","Versuch"],[78,"abuse","insult","Beschimpfung(en)"],[78,"public figure","sb who has a greater influence on society than an average person","Person des öffentlichen Lebens"],[78,"to launch sth","to begin sth new, e.g. a campaign, a project","etw (Aktion usw.) starten, etw (Unternehmen usw.) gründen"],[78,"to respond to sb/sth","to react to sb/sth","auf jdn/etw reagieren"],[78,"to spread sth","to disseminate sth, to distribute sth","etw verbreiten"],[78,"to amplify sth","to make sth louder or stronger","etw verstärken"],[78,"to cite sb/sth","to use the words of sb else","jdn/etw zitieren"],[78,"frankly","honestly, really","offen gesagt, ehrlich gesagt"],[78,"horrifying","terrible, awful","grauenhaft, schrecklich"],[78,"abhorrent","absolutely terrible or awful","abscheulich"],[78,"to scare sb","to shock sb, to make sb scared","jdn erschrecken, jdm Angst einjagen"],[78,"to intimidate sb","to make sb nervous and afraid","jdn einschüchtern"],[78,"to silence sb","to stop sb from expressing their opinion","jdn zum Schweigen bringen"],[78,"truly","really, actually","wirklich"],[78,"mean","nasty, evil","gemein, fies"],[78,"to empower sb","to give sb strength (to do sth)","jdn stärken, jdn aufbauen"]];
+const W = DATEN.map(([seite, en, hinweis, de], i) => ({ i, seite, en, hinweis, de }));
+const KEY = "voc-u6p2-v1";
+let S = { box: {}, fehler: [] };
+try { S = Object.assign(S, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
+const speichern = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+const $ = (s) => document.querySelector(s);
+const esc = (t) => String(t).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+const mischen = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+
+const SEITEN = [...new Set(W.map((w) => w.seite))];
+let gewaehlt = new Set(SEITEN), richtung = "de";
+function seitenChips() {
+  $("#seiten").innerHTML = `<button class="chip" data-s="alle" aria-pressed="${gewaehlt.size === SEITEN.length}">Alle</button>` +
+    SEITEN.map((s) => `<button class="chip" data-s="${s}" aria-pressed="${gewaehlt.size !== SEITEN.length && gewaehlt.has(s)}">S. ${s}</button>`).join("");
+  uebersicht();
+}
+$("#seiten").onclick = (e) => {
+  const b = e.target.closest("[data-s]"); if (!b) return;
+  const s = b.dataset.s;
+  if (s === "alle") gewaehlt = new Set(SEITEN);
+  else {
+    const n = +s;
+    if (gewaehlt.size === SEITEN.length) gewaehlt = new Set([n]);
+    else if (gewaehlt.has(n)) { gewaehlt.delete(n); if (!gewaehlt.size) gewaehlt = new Set(SEITEN); }
+    else gewaehlt.add(n);
+  }
+  seitenChips();
+};
+$("#richtung").onclick = (e) => {
+  const b = e.target.closest("[data-r]"); if (!b) return;
+  richtung = b.dataset.r;
+  document.querySelectorAll("#richtung .chip").forEach((c) => c.setAttribute("aria-pressed", c === b));
+};
+const auswahl = () => W.filter((w) => gewaehlt.has(w.seite));
+function uebersicht() {
+  const a = auswahl(), g = a.filter((w) => (S.box[w.i] || 0) >= 2).length;
+  $("#anzahl").textContent = a.length + " Wörter";
+  $("#gelerntTxt").textContent = g + " sicher gewusst";
+  $("#balken").style.width = (a.length ? (100 * g) / a.length : 0) + "%";
+  const f = S.fehler.length;
+  $("#fehlerTxt").textContent = f ? f + " Wörter, die noch nicht saßen" : "Noch keine Fehler – super!";
+  $("#fehlerKnopf").disabled = !f; $("#fehlerKnopf").style.opacity = f ? 1 : 0.5;
+}
+
+/* Frage/Antwort je nach Richtung */
+const frageVon = (w) => richtung === "de" ? { art: "Auf Englisch?", wort: w.de, hinweis: "" }
+  : richtung === "en" ? { art: "Auf Deutsch?", wort: w.en, hinweis: w.hinweis }
+  : { art: "Welches Wort passt?", wort: w.hinweis.replace(/^e\.g\. /, "„") + (w.hinweis.startsWith("e.g.") ? "“" : ""), hinweis: "Deutsch: " + w.de };
+const antwortVon = (w) => richtung === "en" ? w.de : w.en;
+
+function merken(w, ok) {
+  S.box[w.i] = ok ? Math.min((S.box[w.i] || 0) + 1, 5) : 0;
+  const k = S.fehler.indexOf(w.i);
+  if (!ok && k < 0) S.fehler.push(w.i);
+  if (ok && k >= 0 && S.box[w.i] >= 2) S.fehler.splice(k, 1);
+  speichern();
+}
+
+let runde, nr, richtige, falsche, modus;
+function starten(m, liste) {
+  modus = m === "fehler" ? "tippen" : m;
+  runde = mischen(liste || (m === "fehler" ? S.fehler.map((i) => W[i]) : auswahl()));
+  if (!runde.length) return;
+  nr = 0; richtige = 0; falsche = [];
+  $("#start").hidden = true; $("#fertig").hidden = true; $("#ueben").hidden = false;
+  zeigen(); window.scrollTo(0, 0);
+}
+function kopf() {
+  $("#pos").textContent = (nr + 1) + " / " + runde.length;
+  $("#punkte").textContent = "✓ " + richtige;
+  $("#fortschritt").style.width = (100 * nr) / runde.length + "%";
+}
+function weiter() { nr++; nr < runde.length ? zeigen() : ende(); }
+function zeigen() {
+  kopf();
+  const w = runde[nr], f = frageVon(w), b = $("#buehne");
+  const frageHtml = `<div class="frage"><div class="art">${f.art}</div><div class="wort">${esc(f.wort)}</div>${f.hinweis ? `<div class="hinweis">${esc(f.hinweis)}</div>` : ""}</div>`;
+  if (modus === "karten") {
+    b.innerHTML = `<div class="flip" id="flip"><div class="innen">
+        <div class="seite"><div class="art" style="color:var(--leise);font-size:13px;text-transform:uppercase">${f.art}</div><div class="wort">${esc(f.wort)}</div>${f.hinweis ? `<div class="hinweis">${esc(f.hinweis)}</div>` : ""}</div>
+        <div class="seite hinten"><div class="wort">${esc(antwortVon(w))}</div><div class="hinweis">${esc(richtung === "en" ? w.en : w.hinweis)}</div></div>
+      </div></div><div class="tipphilfe" id="tipphilfe">Tippe auf die Karte zum Umdrehen</div>
+      <div class="zwei" id="bewerten" hidden><button class="knopf nein">Noch nicht</button><button class="knopf ja">Gewusst</button></div>`;
+    $("#flip").onclick = () => { $("#flip").classList.add("um"); $("#bewerten").hidden = false; $("#tipphilfe").hidden = true; };
+    b.querySelector(".nein").onclick = () => { merken(w, false); falsche.push(w); weiter(); };
+    b.querySelector(".ja").onclick = () => { merken(w, true); richtige++; weiter(); };
+  } else if (modus === "quiz") {
+    const rest = mischen(W.filter((x) => x !== w && antwortVon(x) !== antwortVon(w)));
+    const opt = mischen([w, ...rest.slice(0, 3)]);
+    b.innerHTML = frageHtml + `<div class="antworten">${opt.map((o) => `<button class="antw" data-i="${o.i}">${esc(antwortVon(o))}</button>`).join("")}</div>`;
+    b.querySelectorAll(".antw").forEach((btn) => btn.onclick = () => {
+      const ok = +btn.dataset.i === w.i;
+      b.querySelectorAll(".antw").forEach((x) => { x.disabled = true; if (+x.dataset.i === w.i) x.classList.add("richtig"); });
+      if (!ok) { btn.classList.add("falsch"); falsche.push(w); } else richtige++;
+      merken(w, ok); kopf();
+      setTimeout(weiter, ok ? 700 : 1700);
+    });
+  } else {
+    b.innerHTML = frageHtml + `<form id="tf" autocomplete="off"><input class="tipp" id="tipp" placeholder="${richtung === "en" ? "Deutsch eintippen" : "English word"}" autocapitalize="off" autocorrect="off" spellcheck="false" enterkeyhint="done"><button class="knopf">Prüfen</button></form><div id="rm"></div>`;
+    const inp = $("#tipp"); setTimeout(() => inp.focus(), 50);
+    $("#tf").onsubmit = (e) => {
+      e.preventDefault();
+      if ($("#tf").dataset.fertig) return;
+      $("#tf").dataset.fertig = 1; inp.disabled = true;
+      const ok = pruefen(inp.value, w);
+      merken(w, !!ok); if (ok) richtige++; else falsche.push(w); kopf();
+      $("#tf").querySelector(".knopf").remove();
+      $("#rm").innerHTML = `<div class="rueck ${ok ? "gut" : "schlecht"}">${ok === "fastTo" ? "Richtig – im Test aber mit „to“ schreiben:" : ok ? "Richtig!" : "Leider nicht."}<span class="loesung">${esc(antwortVon(w))}</span></div>` +
+        (ok ? "" : `<button class="knopf zweit" id="doch">Ich hatte es doch richtig</button>`) + `<button class="knopf" id="wt">Weiter</button>`;
+      /* kurz sperren, damit derselbe Tipp nicht gleich „Weiter“ auslöst */
+      setTimeout(() => {
+        if (!$("#wt")) return;
+        $("#wt").onclick = weiter; $("#wt").focus();
+        if (!ok) $("#doch").onclick = () => { merken(w, true); richtige++; falsche.pop(); weiter(); };
+      }, 400);
+    };
+  }
+}
+/* Toleranter Vergleich: Groß/Klein, sth/sb, Klammern, Satzzeichen; bei Deutsch reicht eine der Bedeutungen */
+const norm = (t) => t.toLowerCase().replace(/\(.*?\)/g, " ").replace(/\b(sth|sb|sb's|etw|jdn|jdm|jds)\b/g, " ").replace(/[^a-zäöüß/ -]/g, " ").replace(/\s+/g, " ").trim();
+function pruefen(eingabe, w) {
+  const e = norm(eingabe); if (!e) return false;
+  if (richtung === "en") return w.de.split(/,|\//).map(norm).filter(Boolean).some((d) => d === e || (d.length > 4 && e.includes(d)));
+  const z = norm(w.en), ohneTo = z.replace(/^to /, "");
+  const varianten = new Set([z, z.replace(/\/.*$/, ""), z.replace(/-ly$/, ""), z.replace(/ly$/, "")]);
+  if (e === ohneTo) return "fastTo";
+  return [...varianten].some((v) => v === e);
+}
+function ende() {
+  $("#ueben").hidden = true; $("#fertig").hidden = false; window.scrollTo(0, 0);
+  const q = Math.round((100 * richtige) / runde.length);
+  $("#endeTitel").textContent = q >= 90 ? "Stark! Du bist bereit." : q >= 60 ? "Gut – fast geschafft!" : "Dranbleiben, das wird!";
+  $("#endeZahl").textContent = richtige + " / " + runde.length;
+  $("#endeTxt").textContent = falsche.length ? "Diese Wörter solltest du nochmal üben:" : "Keine Fehler in dieser Runde.";
+  $("#endeListe").innerHTML = falsche.map((w) => `<li><b>${esc(w.en)}</b>${esc(w.de)}</li>`).join("");
+  $("#nochmal").hidden = !falsche.length;
+}
+document.querySelectorAll(".modus").forEach((b) => b.onclick = () => starten(b.dataset.m));
+$("#zurueck").onclick = $("#zumStart").onclick = () => { $("#ueben").hidden = true; $("#fertig").hidden = true; $("#start").hidden = false; uebersicht(); };
+$("#nochmal").onclick = () => starten(modus, falsche.slice());
+$("#reset").onclick = () => { S = { box: {}, fehler: [] }; speichern(); uebersicht(); };
+seitenChips();
+</script>
+</body>
+</html>
